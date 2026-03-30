@@ -57,7 +57,7 @@ class BorrowBookStepDefs {
     @Given("a member {string} with member ID {string} and borrowing limit {int}")
     fun aMemberWithIdAndLimit(name: String, memberId: String, limit: Int) {
         currentMemberId = memberId
-        memberJpaRepository.save(MemberJpaEntity(memberId = memberId, name = name, borrowingLimit = limit, activeLoansCount = 0))
+        memberJpaRepository.save(MemberJpaEntity(memberId = memberId, name = name, email = "${name.lowercase().replace(" ", ".")}@example.com", borrowingLimit = limit, activeLoansCount = 0))
     }
 
     @And("the catalog contains a book with ISBN {string} and an available copy with barcode {string}")
@@ -70,7 +70,7 @@ class BorrowBookStepDefs {
     fun memberHasActiveLoans(name: String, count: Int) {
         if (count > 0) {
             val member = memberJpaRepository.findById(currentMemberId).get()
-            memberJpaRepository.save(MemberJpaEntity(memberId = member.memberId, name = member.name, borrowingLimit = member.borrowingLimit, activeLoansCount = count))
+            memberJpaRepository.save(MemberJpaEntity(memberId = member.memberId, name = member.name, email = member.email, borrowingLimit = member.borrowingLimit, activeLoansCount = count))
             for (i in 1..count) {
                 loanJpaRepository.save(
                     LoanJpaEntity(

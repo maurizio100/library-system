@@ -14,6 +14,10 @@ class MemberRepositoryAdapter(
         return jpaRepository.findById(memberId.value).orElse(null)?.toDomain()
     }
 
+    override fun findByEmail(email: String): Member? {
+        return jpaRepository.findByEmail(email)?.toDomain()
+    }
+
     override fun save(member: Member) {
         jpaRepository.save(member.toJpaEntity())
     }
@@ -22,6 +26,7 @@ class MemberRepositoryAdapter(
         return Member(
             memberId = MemberId(memberId),
             name = name,
+            email = email,
             borrowingLimit = borrowingLimit,
             activeLoansCount = activeLoansCount
         )
@@ -31,6 +36,7 @@ class MemberRepositoryAdapter(
         return MemberJpaEntity(
             memberId = memberId.value,
             name = name,
+            email = email,
             borrowingLimit = borrowingLimit,
             activeLoansCount = activeLoansCount
         )
