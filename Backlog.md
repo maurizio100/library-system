@@ -13,8 +13,8 @@
 ## Lending
 
 ### Ready
-- [ ] [001 — Borrow a Book](docs/stories/lending/001-borrow-book.feature) · `lending` · complexity: M
 
 ### In Progress
 
 ### Done
+- [x] [001 — Borrow a Book](docs/stories/lending/001-borrow-book.feature) · `lending` · complexity: M

@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     implementation(project(":catalog"))
+    implementation(project(":lending"))
     implementation(project(":shared"))
 
     implementation("org.springframework.boot:spring-boot-starter")
