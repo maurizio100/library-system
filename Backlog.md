@@ -3,9 +3,9 @@
 ## Catalog
 
 ### Ready
-- [ ] [003 — Search Books in the Catalog](docs/stories/catalog/003-search-books.feature) · `catalog` · complexity: M
 
 ### In Progress
+- [ ] [003 — Search Books in the Catalog](docs/stories/catalog/003-search-books.feature) · `catalog` · complexity: M
 
 ### Done
 - [x] [001 — Add a Book to the Catalog](docs/stories/catalog/001-add-book.feature) · `catalog` · complexity: S
