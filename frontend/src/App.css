@@ -232,3 +232,134 @@ header h1 {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+/* Toolbar actions */
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.add-book-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-book-button:hover {
+  background: #047857;
+}
+
+/* Add Book Page */
+
+.add-book-page h2 {
+  font-size: 1.4rem;
+  margin: 1rem 0 1.5rem;
+  color: var(--text-h, #1a1a1a);
+}
+
+.back-button {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: transparent;
+  color: #6366f1;
+  border: 1.5px solid #6366f1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.lookup-form {
+  margin-bottom: 1.5rem;
+}
+
+.isbn-input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-h, #374151);
+  margin-bottom: 0.35rem;
+}
+
+.book-form {
+  padding: 1.5rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--bg, #fff);
+}
+
+.validation-message {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin: 0.35rem 0 0;
+}
+
+.warning-message {
+  color: #d97706;
+  font-size: 0.8rem;
+  margin: 0.35rem 0 0;
+}
+
+.confirm-button {
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.confirm-button:hover {
+  background: #047857;
+}
+
+.confirm-button:disabled {
+  background: #86efac;
+  cursor: not-allowed;
+}
+
+.success-message {
+  text-align: center;
+  padding: 2rem 1rem;
+  border: 1px solid #a7f3d0;
+  border-radius: 12px;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.success-message p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+}
+
+.success-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}

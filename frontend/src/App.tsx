@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import AddBookPage from './AddBookPage'
 import './App.css'
 
 interface BookSearchResult {
@@ -17,6 +18,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'browse' | 'search'>('browse')
+  const [page, setPage] = useState<'browse' | 'add-book'>('browse')
 
   const fetchBooks = async (searchQuery?: string) => {
     setLoading(true)
@@ -58,6 +60,18 @@ function App() {
     fetchBooks()
   }
 
+  if (page === 'add-book') {
+    return (
+      <div className="app">
+        <header>
+          <h1>Library Catalog</h1>
+          <p className="subtitle">Browse and search the library collection</p>
+        </header>
+        <AddBookPage onBack={() => { setPage('browse'); fetchBooks() }} />
+      </div>
+    )
+  }
+
   return (
     <div className="app">
       <header>
@@ -78,11 +92,16 @@ function App() {
             {loading ? 'Searching...' : 'Search'}
           </button>
         </form>
-        {mode === 'search' && (
-          <button onClick={handleBrowseAll} className="browse-button" disabled={loading}>
-            Show All Books
+        <div className="toolbar-actions">
+          {mode === 'search' && (
+            <button onClick={handleBrowseAll} className="browse-button" disabled={loading}>
+              Show All Books
+            </button>
+          )}
+          <button onClick={() => setPage('add-book')} className="add-book-button">
+            Add Book
           </button>
-        )}
+        </div>
       </div>
 
       {error && <p className="error">{error}</p>}
