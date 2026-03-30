@@ -1,7 +1,7 @@
 package com.library.catalog.bdd
 
-import com.library.catalog.infra.BookJpaRepository
-import com.library.catalog.infra.CopyJpaRepository
+import com.library.catalog.infra.persistence.BookJpaRepository
+import com.library.catalog.infra.persistence.CopyJpaRepository
 import io.cucumber.java.Before
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given

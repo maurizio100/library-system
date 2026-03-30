@@ -1,7 +1,7 @@
 package com.library.catalog.bdd
 
-import com.library.catalog.domain.BookAdded
-import com.library.catalog.domain.CopyRegistered
+import com.library.catalog.domain.event.BookAdded
+import com.library.catalog.domain.event.CopyRegistered
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
