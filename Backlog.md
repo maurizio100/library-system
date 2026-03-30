@@ -3,6 +3,7 @@
 ## Catalog
 
 ### Ready
+- [ ] [003 — Search Books in the Catalog](docs/stories/catalog/003-search-books.feature) · `catalog` · complexity: M
 
 ### In Progress
 
