@@ -64,8 +64,8 @@ function App() {
     return (
       <div className="app">
         <header>
-          <h1>Library Catalog</h1>
-          <p className="subtitle">Browse and search the library collection</p>
+          <h1>The Great Library of Minas Tirith</h1>
+          <p className="subtitle">A chronicle of all volumes known to the Realm of Gondor</p>
         </header>
         <AddBookPage onBack={() => { setPage('browse'); fetchBooks() }} />
       </div>
@@ -75,8 +75,8 @@ function App() {
   return (
     <div className="app">
       <header>
-        <h1>Library Catalog</h1>
-        <p className="subtitle">Browse and search the library collection</p>
+        <h1>The Great Library of Minas Tirith</h1>
+        <p className="subtitle">A chronicle of all volumes known to the Realm of Gondor</p>
       </header>
 
       <div className="toolbar">
@@ -85,21 +85,21 @@ function App() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by title, author, or ISBN..."
+            placeholder="Search the archives by title, scribe, or ISBN..."
             className="search-input"
           />
           <button type="submit" disabled={loading} className="search-button">
-            {loading ? 'Searching...' : 'Search'}
+            {loading ? 'Consulting the archives...' : 'Seek'}
           </button>
         </form>
         <div className="toolbar-actions">
           {mode === 'search' && (
             <button onClick={handleBrowseAll} className="browse-button" disabled={loading}>
-              Show All Books
+              Reveal All Tomes
             </button>
           )}
           <button onClick={() => setPage('add-book')} className="add-book-button">
-            Add Book
+            Inscribe New Tome
           </button>
         </div>
       </div>
@@ -109,10 +109,10 @@ function App() {
       {searched && results.length === 0 && !error && (
         <div className="empty-state">
           <p className="empty-title">
-            {mode === 'search' ? `No books found for "${query}"` : 'The catalog is empty'}
+            {mode === 'search' ? `No scrolls match "${query}" in our records` : 'The shelves stand empty, awaiting their first tome'}
           </p>
           <p className="empty-hint">
-            {mode === 'search' ? 'Try a different search term' : 'Add books to get started'}
+            {mode === 'search' ? 'Perhaps the scribes recorded it under a different name' : 'Inscribe new volumes to fill the Great Library'}
           </p>
         </div>
       )}
@@ -122,8 +122,8 @@ function App() {
           <div className="results-header">
             <p className="results-count">
               {mode === 'search'
-                ? `${results.length} book${results.length !== 1 ? 's' : ''} found`
-                : `${results.length} book${results.length !== 1 ? 's' : ''} in catalog`}
+                ? `${results.length} volume${results.length !== 1 ? 's' : ''} unearthed`
+                : `${results.length} volume${results.length !== 1 ? 's' : ''} in the archive`}
             </p>
           </div>
           <div className="book-list">

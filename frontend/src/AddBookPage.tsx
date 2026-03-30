@@ -39,14 +39,14 @@ function AddBookPage({ onBack }: AddBookPageProps) {
       const exists = await checkIsbnExists(isbn)
       if (exists) {
         setLookupState('already-exists')
-        setErrorMessage('A book with this ISBN already exists in the catalog')
+        setErrorMessage('This tome already resides within the Great Library')
         return
       }
 
       const result = await lookupIsbn(isbn)
       if (!result) {
         setLookupState('not-found')
-        setErrorMessage('No book found for this ISBN')
+        setErrorMessage('No record of this tome exists in the known realms')
         return
       }
 
@@ -56,7 +56,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
       setLookupState('resolved')
     } catch {
       setLookupState('error')
-      setErrorMessage('ISBN lookup service is currently unavailable — please try again later')
+      setErrorMessage('The palantir is clouded — the lookup service cannot be reached')
     }
   }
 
@@ -84,7 +84,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
       }
 
       setSubmitState('success')
-      setSuccessMessage('Book added to catalog')
+      setSuccessMessage('The tome has been inscribed into the Great Library')
     } catch (err) {
       setSubmitState('error')
       setErrorMessage(err instanceof Error ? err.message : 'Failed to add book')
@@ -105,19 +105,19 @@ function AddBookPage({ onBack }: AddBookPageProps) {
   return (
     <div className="add-book-page">
       <button onClick={onBack} className="back-button">
-        Back to Catalog
+        Return to the Archives
       </button>
-      <h2>Add a Book by ISBN</h2>
+      <h2>Inscribe a Tome by ISBN</h2>
 
       {submitState === 'success' ? (
         <div className="success-message">
           <p>{successMessage}</p>
           <div className="success-actions">
             <button onClick={handleReset} className="search-button">
-              Add Another
+              Inscribe Another
             </button>
             <button onClick={onBack} className="browse-button">
-              Back to Catalog
+              Return to the Archives
             </button>
           </div>
         </div>
@@ -132,7 +132,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
                   type="text"
                   value={isbn}
                   onChange={(e) => setIsbn(e.target.value)}
-                  placeholder="Enter 13-digit ISBN"
+                  placeholder="Enter the 13-digit ISBN rune"
                   className="search-input"
                   disabled={lookupState === 'loading'}
                 />
@@ -141,11 +141,11 @@ function AddBookPage({ onBack }: AddBookPageProps) {
                   disabled={!isbnValid || lookupState === 'loading'}
                   className="search-button"
                 >
-                  {lookupState === 'loading' ? 'Looking up...' : 'Look Up'}
+                  {lookupState === 'loading' ? 'Consulting the scribes...' : 'Consult'}
                 </button>
               </div>
               {isbnTouched && !isbnValid && (
-                <p className="validation-message">Invalid ISBN format</p>
+                <p className="validation-message">The runes are malformed — check the ISBN</p>
               )}
             </div>
           </div>
@@ -155,7 +155,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
           {showFields && (
             <div className="book-form">
               <div className="form-field">
-                <label htmlFor="title-input">Title</label>
+                <label htmlFor="title-input">Title of the Work</label>
                 <input
                   id="title-input"
                   type="text"
@@ -165,7 +165,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
                 />
               </div>
               <div className="form-field">
-                <label htmlFor="authors-input">Authors</label>
+                <label htmlFor="authors-input">Scribes & Authors</label>
                 <input
                   id="authors-input"
                   type="text"
@@ -176,7 +176,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
                 />
               </div>
               <div className="form-field">
-                <label htmlFor="year-input">Publication Year</label>
+                <label htmlFor="year-input">Year of Publication</label>
                 <input
                   id="year-input"
                   type="text"
@@ -185,7 +185,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
                   className="search-input"
                 />
                 {!publicationYear && (
-                  <p className="warning-message">Publication year is missing</p>
+                  <p className="warning-message">The year of this work's creation is lost to time</p>
                 )}
               </div>
               <button
@@ -193,7 +193,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
                 disabled={!canConfirm}
                 className="confirm-button"
               >
-                {submitState === 'submitting' ? 'Adding...' : 'Add to Catalog'}
+                {submitState === 'submitting' ? 'The scribes are writing...' : 'Inscribe into the Archive'}
               </button>
             </div>
           )}
