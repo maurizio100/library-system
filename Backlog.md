@@ -21,5 +21,6 @@
 ### In Progress
 - [ ] [002 — Register a Member](docs/stories/lending/002-register-member.feature) · `lending` · complexity: S
 
+
 ### Done
 - [x] [001 — Borrow a Book](docs/stories/lending/001-borrow-book.feature) · `lending` · complexity: M
