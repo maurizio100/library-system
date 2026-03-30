@@ -5,11 +5,11 @@
 ### Ready
 
 ### In Progress
-- [ ] [003 — Search Books in the Catalog](docs/stories/catalog/003-search-books.feature) · `catalog` · complexity: M
 
 ### Done
 - [x] [001 — Add a Book to the Catalog](docs/stories/catalog/001-add-book.feature) · `catalog` · complexity: S
 - [x] [002 — Register a Copy of a Book](docs/stories/catalog/002-register-copy.feature) · `catalog` · complexity: S
+- [x] [003 — Search Books in the Catalog](docs/stories/catalog/003-search-books.feature) · `catalog` · complexity: M
 
 ## Lending
 
