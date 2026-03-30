@@ -10,6 +10,6 @@ dependencies {
     implementation(project(":lending"))
     implementation(project(":shared"))
 
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 }

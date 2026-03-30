@@ -1,0 +1,136 @@
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #4a90d9;
+}
+
+.search-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #4a90d9;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-button:hover {
+  background: #357abd;
+}
+
+.search-button:disabled {
+  background: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #d32f2f;
+  padding: 0.75rem;
+  background: #ffeef0;
+  border-radius: 8px;
+}
+
+.no-results {
+  color: #666;
+  text-align: center;
+  padding: 2rem;
+}
+
+.results-count {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.book-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+
+.book-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.book-info h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.25rem;
+  color: #1a1a1a;
+}
+
+.book-authors {
+  color: #555;
+  margin: 0 0 0.25rem;
+}
+
+.book-meta {
+  color: #888;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.availability {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.availability.available {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.availability.unavailable {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.copy-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.copy-label {
+  font-size: 0.75rem;
+  text-align: center;
+}
