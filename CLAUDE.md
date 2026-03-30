@@ -1,6 +1,6 @@
 # Library System
 
-A modular monolith for managing a public library's catalog and lending operations. Built with Java 21, Spring Boot 3.x, Angular, and Maven.
+A modular monolith for managing a public library's catalog and lending operations. Built with Kotlin, Spring Boot 3.x, React, and Gradle.
 
 ## Directory Layout
 
@@ -24,44 +24,46 @@ A modular monolith for managing a public library's catalog and lending operation
 │   └── stories/
 │       ├── catalog/        ← .feature files for Catalog epic
 │       └── lending/        ← .feature files for Lending epic
-└── src/                    ← created when first module is implemented
-    ├── catalog/
-    │   ├── domain/         ← entities, value objects, events, repository interfaces
-    │   ├── api/            ← REST controllers, DTOs
-    │   ├── infra/          ← JPA repositories, Spring event publishers
-    │   └── tests/
-    │       ├── bdd/        ← Cucumber step definitions
-    │       └── arch/       ← ArchUnit tests
-    ├── lending/
-    │   └── (same structure)
-    └── shared/
-        └── events/         ← domain event classes shared between contexts
+├── shared/                 ← shared domain events module
+│   └── src/main/kotlin/com/library/shared/events/
+├── catalog/                ← catalog bounded context module
+│   ├── src/main/kotlin/com/library/catalog/
+│   │   ├── domain/         ← entities, value objects, events, repository interfaces
+│   │   ├── api/            ← REST controllers, DTOs
+│   │   └── infra/          ← JPA repositories, Spring event publishers
+│   └── src/test/kotlin/com/library/catalog/
+│       ├── domain/         ← unit tests
+│       ├── bdd/            ← Cucumber step definitions
+│       └── arch/           ← ArchUnit tests
+├── application/            ← Spring Boot application entry point
+│   └── src/main/kotlin/com/library/
+└── build.gradle.kts        ← root build file
 ```
 
 ## Bounded Contexts
 
 This system has two bounded contexts. **Never mix code between them.**
 
-| Context | Maven Module | REST Base Path | Spec |
+| Context | Gradle Module | REST Base Path | Spec |
 |---|---|---|---|
-| Catalog | `catalog` | `/api/catalog` | [docs/domain/bounded-contexts/catalog.md](docs/domain/bounded-contexts/catalog.md) |
-| Lending | `lending` | `/api/lending` | [docs/domain/bounded-contexts/lending.md](docs/domain/bounded-contexts/lending.md) |
+| Catalog | `:catalog` | `/api/catalog` | [docs/domain/bounded-contexts/catalog.md](docs/domain/bounded-contexts/catalog.md) |
+| Lending | `:lending` | `/api/lending` | [docs/domain/bounded-contexts/lending.md](docs/domain/bounded-contexts/lending.md) |
 
-Cross-context communication happens **only** through domain events in the `shared` module.
+Cross-context communication happens **only** through domain events in the `:shared` module.
 
 ## Coding Conventions
 
 ### Domain Layer (`domain/`)
-- **No Spring imports.** Domain classes must be pure Java — no `@Component`, `@Service`, `@Autowired`, `@Entity`.
+- **No Spring imports.** Domain classes must be pure Kotlin — no `@Component`, `@Service`, `@Autowired`, `@Entity`.
 - Entities use the names from the [glossary](docs/domain/glossary.md) exactly.
-- Value objects are immutable. Use Java records where appropriate.
+- Value objects are immutable. Use Kotlin data classes where appropriate.
 - Repository interfaces are defined in domain — implementations live in `infra/`.
 - Domain events extend a common marker interface from `shared/events/`.
 
 ### API Layer (`api/`)
 - REST controllers use Spring Web annotations.
 - DTOs are separate from domain objects — map explicitly, never expose domain entities directly.
-- Input validation happens at the API layer (Bean Validation annotations on DTOs).
+- Domain validation is authoritative — domain classes enforce their own invariants.
 - Command objects bridge API → domain.
 
 ### Infra Layer (`infra/`)
@@ -78,15 +80,15 @@ Cross-context communication happens **only** through domain events in the `share
 
 | Type | Location | Naming | Runner |
 |---|---|---|---|
-| Domain unit tests | `src/<context>/tests/` | `<ClassName>Test.java` | JUnit 5 |
-| BDD acceptance tests | `src/<context>/tests/bdd/` | `<Feature>StepDefs.java` | Cucumber + JUnit 5 |
-| Architecture tests | `src/<context>/tests/arch/` | `<Context>ArchitectureTest.java` | ArchUnit |
+| Domain unit tests | `<context>/src/test/kotlin/.../domain/` | `<ClassName>Test.kt` | JUnit 5 |
+| BDD acceptance tests | `<context>/src/test/kotlin/.../bdd/` | `<Feature>StepDefs.kt` | Cucumber + JUnit 5 |
+| Architecture tests | `<context>/src/test/kotlin/.../arch/` | `<Context>ArchitectureTest.kt` | ArchUnit |
 
 ### Architecture Test Rules (ArchUnit)
 - Domain layer must not depend on API or Infra layers
 - Domain layer must not import any Spring framework classes
 - Catalog module must not depend on Lending module (and vice versa)
-- Only the `shared/events` module may be referenced by both contexts
+- Only the `:shared` module may be referenced by both contexts
 
 ## How to Implement a Story
 
@@ -97,7 +99,7 @@ Cross-context communication happens **only** through domain events in the `share
 5. **Implement domain first** — entities, value objects, business rules
 6. **Write tests** — Cucumber step definitions for every scenario, unit tests for domain logic
 7. **Then API and infra** — controllers, DTOs, persistence
-8. **Run full verification:** `mvn clean verify`
+8. **Run full verification:** `./gradlew clean build`
 9. All Gherkin scenarios must pass before committing
 10. Commit: `feat(<context>): implement story <NNN> — <short title>`
 11. Open PR with story reference
@@ -115,17 +117,17 @@ Cross-context communication happens **only** through domain events in the `share
 
 ```bash
 # Build everything
-mvn clean verify
+./gradlew clean build
 
 # Run tests only
-mvn test
+./gradlew test
 
 # Run the application
-mvn spring-boot:run -pl application
+./gradlew :application:bootRun
 
 # Run a specific context's tests
-mvn test -pl catalog
-mvn test -pl lending
+./gradlew :catalog:test
+./gradlew :lending:test
 ```
 
 ## Key Specs

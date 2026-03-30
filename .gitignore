@@ -4,3 +4,13 @@
 # OS
 .DS_Store
 Thumbs.db
+
+# Gradle
+build/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
