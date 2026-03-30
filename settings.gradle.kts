@@ -1,3 +1,3 @@
 rootProject.name = "library-system"
 
-include("shared", "catalog", "application")
+include("shared", "catalog", "lending", "application")
