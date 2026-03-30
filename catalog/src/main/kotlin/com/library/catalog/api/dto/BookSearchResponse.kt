@@ -5,5 +5,6 @@ data class BookSearchResponse(
     val title: String,
     val authors: List<String>,
     val publicationYear: Int,
+    val totalCopies: Int,
     val availableCopies: Int
 )

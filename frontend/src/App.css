@@ -1,72 +1,135 @@
 .app {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+header {
+  margin-bottom: 2rem;
+}
+
 header h1 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #1a1a1a;
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+  color: var(--text-h, #1a1a1a);
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: var(--text, #888);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
 }
 
 .search-form {
   display: flex;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .search-input {
   flex: 1;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  border: 2px solid var(--border, #e0e0e0);
+  border-radius: 10px;
   outline: none;
+  background: var(--bg, #fff);
+  color: var(--text-h, #1a1a1a);
   transition: border-color 0.2s;
 }
 
 .search-input:focus {
-  border-color: #4a90d9;
+  border-color: #6366f1;
 }
 
 .search-button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background: #4a90d9;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #6366f1;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .search-button:hover {
-  background: #357abd;
+  background: #4f46e5;
 }
 
 .search-button:disabled {
-  background: #a0a0a0;
+  background: #a5a6f6;
+  cursor: not-allowed;
+}
+
+.browse-button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: transparent;
+  color: #6366f1;
+  border: 1.5px solid #6366f1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.browse-button:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.browse-button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
 .error {
-  color: #d32f2f;
-  padding: 0.75rem;
-  background: #ffeef0;
-  border-radius: 8px;
+  color: #dc2626;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
 }
 
-.no-results {
-  color: #666;
+.empty-state {
   text-align: center;
-  padding: 2rem;
+  padding: 3rem 1rem;
+}
+
+.empty-title {
+  color: var(--text-h, #374151);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.empty-hint {
+  color: var(--text, #9ca3af);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.results-header {
+  margin-bottom: 1rem;
 }
 
 .results-count {
-  color: #666;
-  margin-bottom: 1rem;
+  color: var(--text, #6b7280);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
 }
 
 .book-list {
@@ -79,58 +142,93 @@ header h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  transition: box-shadow 0.2s;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  background: var(--bg, #fff);
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .book-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .book-info h2 {
-  font-size: 1.1rem;
-  margin: 0 0 0.25rem;
-  color: #1a1a1a;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.3rem;
+  color: var(--text-h, #111827);
 }
 
 .book-authors {
-  color: #555;
-  margin: 0 0 0.25rem;
+  color: var(--text, #6b7280);
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
 }
 
 .book-meta {
-  color: #888;
-  font-size: 0.85rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
   margin: 0;
+}
+
+.isbn-badge,
+.year-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.isbn-badge {
+  background: var(--code-bg, #f3f4f6);
+  color: var(--text, #6b7280);
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.year-badge {
+  background: var(--code-bg, #f3f4f6);
+  color: var(--text, #6b7280);
 }
 
 .availability {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 80px;
-  padding: 0.5rem;
-  border-radius: 8px;
+  justify-content: center;
+  min-width: 72px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  flex-shrink: 0;
+  margin-left: 1rem;
 }
 
 .availability.available {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #ecfdf5;
+  color: #059669;
 }
 
 .availability.unavailable {
-  background: #fce4ec;
-  color: #c62828;
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 .copy-count {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .copy-label {
-  font-size: 0.75rem;
-  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }

@@ -34,14 +34,20 @@ class CatalogController(
 ) {
 
     @GetMapping("/books")
-    fun searchBooks(@RequestParam q: String): List<BookSearchResponse> {
-        require(q.isNotBlank()) { "Search query is required" }
-        return bookSearchPort.search(q).map {
+    fun searchBooks(@RequestParam(required = false) q: String?): List<BookSearchResponse> {
+        val results = if (q == null) {
+            bookSearchPort.findAll()
+        } else {
+            require(q.isNotBlank()) { "Search query is required" }
+            bookSearchPort.search(q)
+        }
+        return results.map {
             BookSearchResponse(
                 isbn = it.isbn,
                 title = it.title,
                 authors = it.authors,
                 publicationYear = it.publicationYear,
+                totalCopies = it.totalCopies,
                 availableCopies = it.availableCopies
             )
         }
