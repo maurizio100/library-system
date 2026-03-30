@@ -1,5 +1,7 @@
 package com.library.catalog.api
 
+import com.library.catalog.domain.BookNotFoundException
+import com.library.catalog.domain.DuplicateBarcodeException
 import com.library.catalog.domain.DuplicateIsbnException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -14,6 +16,18 @@ class CatalogExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     fun handleDuplicateIsbn(ex: DuplicateIsbnException): ErrorResponse {
         return ErrorResponse(ex.message ?: "ISBN already exists")
+    }
+
+    @ExceptionHandler(DuplicateBarcodeException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleDuplicateBarcode(ex: DuplicateBarcodeException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "Barcode already exists")
+    }
+
+    @ExceptionHandler(BookNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleBookNotFound(ex: BookNotFoundException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "Book not found")
     }
 
     @ExceptionHandler(IllegalArgumentException::class)

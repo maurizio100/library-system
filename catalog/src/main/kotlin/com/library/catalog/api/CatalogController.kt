@@ -3,9 +3,13 @@ package com.library.catalog.api
 import com.library.catalog.domain.AddBookCommand
 import com.library.catalog.domain.AddBookHandler
 import com.library.catalog.domain.Author
+import com.library.catalog.domain.Barcode
 import com.library.catalog.domain.ISBN
+import com.library.catalog.domain.RegisterCopyCommand
+import com.library.catalog.domain.RegisterCopyHandler
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/catalog")
 class CatalogController(
     private val addBookHandler: AddBookHandler,
+    private val registerCopyHandler: RegisterCopyHandler,
     private val eventPublisher: ApplicationEventPublisher
 ) {
 
@@ -35,6 +40,22 @@ class CatalogController(
             title = event.title,
             authors = event.authors,
             publicationYear = event.publicationYear
+        )
+    }
+
+    @PostMapping("/books/{isbn}/copies")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun registerCopy(@PathVariable isbn: String, @RequestBody request: RegisterCopyRequest): CopyResponse {
+        val command = RegisterCopyCommand(
+            isbn = ISBN(isbn),
+            barcode = Barcode(request.barcode)
+        )
+        val event = registerCopyHandler.handle(command)
+        eventPublisher.publishEvent(event)
+        return CopyResponse(
+            barcode = event.barcode,
+            isbn = event.isbn,
+            status = "Available"
         )
     }
 }
