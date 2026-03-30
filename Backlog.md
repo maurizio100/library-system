@@ -3,6 +3,7 @@
 ## Catalog
 
 ### Ready
+- [ ] [004 — List All Books in the Catalog](docs/stories/catalog/004-list-all-books.feature) · `catalog` · complexity: S
 
 ### In Progress
 
