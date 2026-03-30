@@ -108,33 +108,14 @@ Cross-context communication happens **only** through domain events in the `:shar
 
 ## Parallel Work Rules
 
-- Two stories in **different** bounded contexts can be worked on in parallel
-- Two stories in the **same** bounded context must be sequential
-- Never modify the `shared/events` module without checking both contexts
-- Never modify files outside the story's bounded context
+- Different bounded contexts can be worked on in parallel; same context must be sequential
+- Never modify `shared/events` without checking both contexts
 
 ## Build & Run
 
 ```bash
-# Build everything
-./gradlew clean build
-
-# Run tests only
-./gradlew test
-
-# Run the application
-./gradlew :application:bootRun
-
-# Run a specific context's tests
-./gradlew :catalog:test
-./gradlew :lending:test
+./gradlew clean build          # Build everything
+./gradlew test                 # Run tests only
+./gradlew :application:bootRun # Run the application
+./gradlew :catalog:test        # Run a specific context's tests
 ```
-
-## Key Specs
-
-- [Context Map](docs/domain/context-map.md)
-- [Glossary](docs/domain/glossary.md)
-- [Target Architecture](docs/architecture/target-architecture.md)
-- [Solution Strategy](docs/architecture/solution-strategy.md)
-- [Quality Attributes](docs/architecture/quality-attributes.md)
-- [ADR Index](docs/decisions/)

@@ -2,30 +2,15 @@
 
 Manages the library's collection of books and their physical copies. Owns the truth about what the library has and whether copies are available for lending.
 
-## Key Entities
+## Aggregates & Invariants
 
-### Book (Aggregate Root)
-- **Identity:** ISBN
-- **Attributes:** title, author(s), publication year
-- **Invariants:**
-  - ISBN must be valid (13 digits)
-  - A Book must have at least a title and one author
-- **Owns:** a collection of Copies
+### Book (Aggregate Root) — identity: ISBN
+- Must have at least a title and one author
+- Owns a collection of Copies
 
-### Copy (Entity, child of Book)
-- **Identity:** Barcode
-- **Attributes:** barcode, status (Available | Borrowed)
-- **Invariants:**
-  - Barcode must be unique across all Copies in the system
-  - Status transitions: Available → Borrowed, Borrowed → Available
-
-## Value Objects
-
-| Value Object | Attributes | Validation Rules |
-|---|---|---|
-| **ISBN** | value (String) | Must be exactly 13 digits |
-| **Author** | name (String) | Must not be blank |
-| **Barcode** | value (String) | Must not be blank, must be unique |
+### Copy (Entity, child of Book) — identity: Barcode
+- Barcode must be unique across all Copies in the system
+- Status transitions: Available → Borrowed, Borrowed → Available
 
 ## Domain Events
 
@@ -46,5 +31,5 @@ Manages the library's collection of books and their physical copies. Owns the tr
 
 ## Context Relationships
 
-- **Downstream consumer:** Lending context subscribes to `CopyAvailabilityChanged` events
-- **Inbound queries:** Lending context may query copy availability before creating a loan
+- **Downstream consumer:** Lending subscribes to `CopyAvailabilityChanged` events
+- **Inbound queries:** Lending may query copy availability before creating a loan
