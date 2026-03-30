@@ -8,6 +8,7 @@
 | **Domain Events** | Inter-context communication via Spring's event system. Loose coupling between Catalog and Lending. |
 | **BDD with Cucumber** | Gherkin stories are executable specs. Acceptance criteria are automated, not just documentation. |
 | **Architecture Fitness Functions** | ArchUnit tests enforce hexagonal layer rules and bounded context isolation at build time. |
+| **Spring Data JPA Repositories** | Prefer derived query methods and `@Query` JPQL over native SQL. Keeps persistence code concise, type-safe, and database-agnostic. |
 
 ## Testing Strategy
 
