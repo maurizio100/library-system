@@ -3,6 +3,7 @@
 ## Catalog
 
 ### Ready
+- [ ] [005 — Add a Book by ISBN Lookup](docs/stories/catalog/005-add-book-by-isbn-lookup.feature) · `catalog` · complexity: M
 
 ### In Progress
 
