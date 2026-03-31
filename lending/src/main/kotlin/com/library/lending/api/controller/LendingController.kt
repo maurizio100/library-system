@@ -2,8 +2,12 @@ package com.library.lending.api.controller
 
 import com.library.lending.api.dto.CreateLoanRequest
 import com.library.lending.api.dto.LoanResponse
+import com.library.lending.api.dto.MemberResponse
+import com.library.lending.api.dto.RegisterMemberRequest
 import com.library.lending.domain.command.CreateLoanCommand
 import com.library.lending.domain.command.CreateLoanHandler
+import com.library.lending.domain.command.RegisterMemberCommand
+import com.library.lending.domain.command.RegisterMemberHandler
 import com.library.lending.domain.model.MemberId
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
@@ -17,8 +21,26 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/lending")
 class LendingController(
     private val createLoanHandler: CreateLoanHandler,
+    private val registerMemberHandler: RegisterMemberHandler,
     private val eventPublisher: ApplicationEventPublisher
 ) {
+
+    @PostMapping("/members")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun registerMember(@RequestBody request: RegisterMemberRequest): MemberResponse {
+        val command = RegisterMemberCommand(
+            name = request.name,
+            email = request.email
+        )
+        val event = registerMemberHandler.handle(command)
+        eventPublisher.publishEvent(event)
+        return MemberResponse(
+            memberId = event.memberId,
+            name = event.name,
+            email = event.email,
+            borrowingLimit = 3
+        )
+    }
 
     @PostMapping("/loans")
     @ResponseStatus(HttpStatus.CREATED)

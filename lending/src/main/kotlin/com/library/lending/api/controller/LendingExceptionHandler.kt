@@ -3,6 +3,9 @@ package com.library.lending.api.controller
 import com.library.lending.api.dto.ErrorResponse
 import com.library.lending.domain.exception.BorrowingLimitReachedException
 import com.library.lending.domain.exception.CopyNotAvailableException
+import com.library.lending.domain.exception.DuplicateEmailException
+import com.library.lending.domain.exception.InvalidEmailException
+import com.library.lending.domain.exception.MemberNameRequiredException
 import com.library.lending.domain.exception.MemberNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -28,5 +31,23 @@ class LendingExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     fun handleCopyNotAvailable(ex: CopyNotAvailableException): ErrorResponse {
         return ErrorResponse(ex.message ?: "Copy is not available")
+    }
+
+    @ExceptionHandler(DuplicateEmailException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleDuplicateEmail(ex: DuplicateEmailException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "A member with this email already exists")
+    }
+
+    @ExceptionHandler(InvalidEmailException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleInvalidEmail(ex: InvalidEmailException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "Invalid email address")
+    }
+
+    @ExceptionHandler(MemberNameRequiredException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleMemberNameRequired(ex: MemberNameRequiredException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "Member name is required")
     }
 }

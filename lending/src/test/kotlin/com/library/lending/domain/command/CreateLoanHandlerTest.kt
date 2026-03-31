@@ -27,7 +27,7 @@ class CreateLoanHandlerTest {
 
     @Test
     fun `creates loan for valid member and available copy`() {
-        val member = Member(memberId, "Alice", borrowingLimit = 3, activeLoansCount = 0)
+        val member = Member(memberId, "Alice", "alice@example.com", borrowingLimit = 3, activeLoansCount = 0)
         every { memberRepository.findById(memberId) } returns member
         every { copyAvailabilityPort.isCopyAvailable("EJ-001") } returns true
 
@@ -50,7 +50,7 @@ class CreateLoanHandlerTest {
 
     @Test
     fun `rejects loan when borrowing limit reached`() {
-        val member = Member(memberId, "Alice", borrowingLimit = 3, activeLoansCount = 3)
+        val member = Member(memberId, "Alice", "alice@example.com", borrowingLimit = 3, activeLoansCount = 3)
         every { memberRepository.findById(memberId) } returns member
 
         val ex = assertThrows<BorrowingLimitReachedException> { handler.handle(command) }
@@ -60,7 +60,7 @@ class CreateLoanHandlerTest {
 
     @Test
     fun `rejects loan for unavailable copy`() {
-        val member = Member(memberId, "Alice", borrowingLimit = 3, activeLoansCount = 0)
+        val member = Member(memberId, "Alice", "alice@example.com", borrowingLimit = 3, activeLoansCount = 0)
         every { memberRepository.findById(memberId) } returns member
         every { copyAvailabilityPort.isCopyAvailable("EJ-001") } returns false
 
