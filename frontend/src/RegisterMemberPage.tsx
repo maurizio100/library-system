@@ -1,12 +1,10 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
-interface RegisterMemberPageProps {
-  onBack: () => void
-}
-
-function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
+function RegisterMemberPage() {
+  const navigate = useNavigate()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
@@ -65,12 +63,6 @@ function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
 
   return (
     <div>
-      <button
-        onClick={onBack}
-        className="py-1.5 px-3 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
-      >
-        Return to the Archives
-      </button>
       <h2 className="font-heading text-2xl text-text-heading my-4 mb-6 tracking-wide">
         Register a New Member
       </h2>
@@ -87,7 +79,7 @@ function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
               Register Another
             </button>
             <button
-              onClick={onBack}
+              onClick={() => navigate('/catalog/browse')}
               className="py-2 px-4 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
             >
               Return to the Archives

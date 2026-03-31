@@ -18,6 +18,10 @@ class MemberRepositoryAdapter(
         return jpaRepository.findByEmail(email)?.toDomain()
     }
 
+    override fun findAll(): List<Member> {
+        return jpaRepository.findAll().map { it.toDomain() }
+    }
+
     override fun save(member: Member) {
         jpaRepository.save(member.toJpaEntity())
     }

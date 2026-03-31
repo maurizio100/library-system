@@ -15,6 +15,8 @@ import com.library.lending.domain.command.ReturnBookHandler
 import com.library.lending.domain.model.MemberId
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
+import com.library.lending.domain.port.MemberRepository
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -27,8 +29,21 @@ class LendingController(
     private val createLoanHandler: CreateLoanHandler,
     private val registerMemberHandler: RegisterMemberHandler,
     private val returnBookHandler: ReturnBookHandler,
+    private val memberRepository: MemberRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) {
+
+    @GetMapping("/members")
+    fun listMembers(): List<MemberResponse> {
+        return memberRepository.findAll().map { member ->
+            MemberResponse(
+                memberId = member.memberId.value,
+                name = member.name,
+                email = member.email,
+                borrowingLimit = member.borrowingLimit
+            )
+        }
+    }
 
     @PostMapping("/members")
     @ResponseStatus(HttpStatus.CREATED)

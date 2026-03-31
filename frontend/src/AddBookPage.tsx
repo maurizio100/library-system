@@ -1,14 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { isValidIsbn, lookupIsbn, checkIsbnExists } from './isbnLookup'
 
 type LookupState = 'idle' | 'loading' | 'resolved' | 'not-found' | 'error' | 'already-exists'
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
-interface AddBookPageProps {
-  onBack: () => void
-}
-
-function AddBookPage({ onBack }: AddBookPageProps) {
+function AddBookPage() {
+  const navigate = useNavigate()
   const [isbn, setIsbn] = useState('')
   const [lookupState, setLookupState] = useState<LookupState>('idle')
   const [title, setTitle] = useState('')
@@ -104,12 +102,6 @@ function AddBookPage({ onBack }: AddBookPageProps) {
 
   return (
     <div>
-      <button
-        onClick={onBack}
-        className="py-1.5 px-3 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
-      >
-        Return to the Archives
-      </button>
       <h2 className="font-heading text-2xl text-text-heading my-4 mb-6 tracking-wide">
         Inscribe a Tome by ISBN
       </h2>
@@ -125,7 +117,7 @@ function AddBookPage({ onBack }: AddBookPageProps) {
               Inscribe Another
             </button>
             <button
-              onClick={onBack}
+              onClick={() => navigate('/catalog/browse')}
               className="py-2 px-4 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
             >
               Return to the Archives

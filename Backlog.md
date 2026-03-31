@@ -6,6 +6,7 @@
 - [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
+- [ ] [007 — Sidebar Navigation for Catalog Pages](docs/stories/catalog/007-catalog-sidebar-navigation.feature) · `catalog` · complexity: M
 
 ### Done
 - [x] [005 — Add a Book by ISBN Lookup](docs/stories/catalog/005-add-book-by-isbn-lookup.feature) · `catalog` · complexity: M
@@ -17,10 +18,14 @@
 ## Lending
 
 ### Ready
+- [ ] [010 — Sidebar Navigation for Lending Pages](docs/stories/lending/010-lending-sidebar-navigation.feature) · `lending` · complexity: M
+- [ ] [009 — Select a Member (UI)](docs/stories/lending/009-select-member-ui.feature) · `lending` · complexity: S
+- [ ] [007 — Select an Available Copy (UI)](docs/stories/lending/007-select-available-copy-ui.feature) · `lending` · complexity: S
 - [ ] [006 — Calculate Overdue Fees](docs/stories/lending/006-calculate-overdue-fees.feature) · `lending` · complexity: M
 - [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
 ### In Progress
+- [ ] [008 — List All Members](docs/stories/lending/008-list-all-members.feature) · `lending` · complexity: S
 
 ### Done
 - [x] [004 — Borrow a Book (UI)](docs/stories/lending/004-borrow-book-ui.feature) · `lending` · complexity: S
