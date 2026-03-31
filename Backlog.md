@@ -17,6 +17,9 @@
 ## Lending
 
 ### Ready
+- [ ] [009 — Select a Member (UI)](docs/stories/lending/009-select-member-ui.feature) · `lending` · complexity: S
+- [ ] [008 — List All Members](docs/stories/lending/008-list-all-members.feature) · `lending` · complexity: S
+- [ ] [007 — Select an Available Copy (UI)](docs/stories/lending/007-select-available-copy-ui.feature) · `lending` · complexity: S
 - [ ] [006 — Calculate Overdue Fees](docs/stories/lending/006-calculate-overdue-fees.feature) · `lending` · complexity: M
 - [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
