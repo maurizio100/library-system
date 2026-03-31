@@ -3,10 +3,10 @@
 ## Catalog
 
 ### Ready
-- [ ] [008 — Register a Copy via the UI](docs/stories/catalog/008-register-copy-ui.feature) · `catalog` · complexity: S
 - [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
+- [ ] [008 — Register a Copy via the UI](docs/stories/catalog/008-register-copy-ui.feature) · `catalog` · complexity: S
 
 ### Done
 - [x] [007 — Sidebar Navigation for Catalog Pages](docs/stories/catalog/007-catalog-sidebar-navigation.feature) · `catalog` · complexity: M
