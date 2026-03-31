@@ -18,6 +18,7 @@ class RegisterMemberHandlerTest {
     private val memberRepository = object : MemberRepository {
         override fun findById(memberId: MemberId): Member? = members[memberId.value]
         override fun findByEmail(email: String): Member? = members.values.find { it.email == email }
+        override fun findAll(): List<Member> = members.values.toList()
         override fun save(member: Member) {
             members[member.memberId.value] = member
         }

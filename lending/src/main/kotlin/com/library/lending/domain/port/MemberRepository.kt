@@ -6,5 +6,6 @@ import com.library.lending.domain.model.MemberId
 interface MemberRepository {
     fun findById(memberId: MemberId): Member?
     fun findByEmail(email: String): Member?
+    fun findAll(): List<Member>
     fun save(member: Member)
 }
