@@ -16,6 +16,8 @@
 ## Lending
 
 ### Ready
+- [ ] [004 — Borrow a Book (UI)](docs/stories/lending/004-borrow-book-ui.feature) · `lending` · complexity: S
+- [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
 ### In Progress
 
