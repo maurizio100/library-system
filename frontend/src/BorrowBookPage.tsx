@@ -72,69 +72,88 @@ function BorrowBookPage({ onBack }: BorrowBookPageProps) {
   }
 
   return (
-    <div className="add-book-page">
-      <button onClick={onBack} className="back-button">
+    <div>
+      <button
+        onClick={onBack}
+        className="py-1.5 px-3 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
+      >
         Return to the Archives
       </button>
-      <h2>Borrow a Book</h2>
+      <h2 className="font-heading text-2xl text-text-heading my-4 mb-6 tracking-wide">
+        Borrow a Book
+      </h2>
 
       {submitState === 'success' && loanDetails ? (
-        <div className="success-message">
-          <p>The tome has been entrusted to the borrower</p>
-          <div className="loan-details">
+        <div className="text-center py-8 px-4 border border-success-border rounded bg-success-bg text-success">
+          <p className="text-lg font-semibold font-heading m-0 mb-4">The tome has been entrusted to the borrower</p>
+          <div className="mb-4">
             <p>Member ID: {loanDetails.memberId}</p>
             <p>Copy Barcode: {loanDetails.copyBarcode}</p>
             <p>Due Date: {loanDetails.dueDate}</p>
           </div>
-          <div className="success-actions">
-            <button onClick={handleReset} className="search-button">
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={handleReset}
+              className="py-3 px-6 text-base font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
+            >
               Lend Another
             </button>
-            <button onClick={onBack} className="browse-button">
+            <button
+              onClick={onBack}
+              className="py-2 px-4 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
+            >
               Return to the Archives
             </button>
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="book-form">
-          <div className="form-field">
-            <label htmlFor="member-id-input">Member ID</label>
+        <form onSubmit={handleSubmit} className="p-6 border border-border rounded bg-bg">
+          <div className="mb-4">
+            <label htmlFor="member-id-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+              Member ID
+            </label>
             <input
               id="member-id-input"
               type="text"
               value={memberId}
               onChange={(e) => setMemberId(e.target.value)}
               placeholder="The borrower's membership identifier"
-              className="search-input"
+              className="w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
               disabled={submitState === 'submitting'}
             />
           </div>
-          <div className="form-field">
-            <label htmlFor="copy-barcode-input">Copy Barcode</label>
+          <div className="mb-4">
+            <label htmlFor="copy-barcode-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+              Copy Barcode
+            </label>
             <input
               id="copy-barcode-input"
               type="text"
               value={copyBarcode}
               onChange={(e) => setCopyBarcode(e.target.value)}
               placeholder="The barcode inscribed upon the tome"
-              className="search-input"
+              className="w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
               disabled={submitState === 'submitting'}
             />
           </div>
 
           {memberId.trim().length > 0 && copyBarcode.trim().length > 0 && submitState === 'idle' && (
-            <div className="loan-summary">
+            <div className="mb-4 text-text text-sm">
               <p>Member ID: {memberId.trim()}</p>
               <p>Copy Barcode: {copyBarcode.trim()}</p>
             </div>
           )}
 
-          {errorMessage && <p className="error">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-4 text-sm">
+              {errorMessage}
+            </p>
+          )}
 
           <button
             type="submit"
             disabled={!canConfirm}
-            className="confirm-button"
+            className="mt-2 py-3 px-6 text-base font-semibold font-heading bg-success text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-success-hover disabled:bg-success-disabled disabled:cursor-not-allowed"
           >
             {submitState === 'submitting' ? 'The scribes are writing...' : 'Confirm Loan'}
           </button>

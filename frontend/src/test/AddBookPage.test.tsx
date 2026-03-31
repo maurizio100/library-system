@@ -52,7 +52,7 @@ describe('AddBookPage', () => {
 
     const isbnInput = screen.getByLabelText('ISBN')
     await user.type(isbnInput, '9780134685991')
-    await user.click(screen.getByRole('button', { name: 'Look Up' }))
+    await user.click(screen.getByRole('button', { name: 'Consult' }))
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('Effective Java')).toBeInTheDocument()
@@ -60,10 +60,10 @@ describe('AddBookPage', () => {
     expect(screen.getByDisplayValue('Joshua Bloch')).toBeInTheDocument()
     expect(screen.getByDisplayValue('2018')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Add to Catalog' }))
+    await user.click(screen.getByRole('button', { name: 'Inscribe into the Archive' }))
 
     await waitFor(() => {
-      expect(screen.getByText('Book added to catalog')).toBeInTheDocument()
+      expect(screen.getByText('The tome has been inscribed into the Great Library')).toBeInTheDocument()
     })
   })
 
@@ -92,20 +92,20 @@ describe('AddBookPage', () => {
     render(<AddBookPage onBack={noop} />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780596007126')
-    await user.click(screen.getByRole('button', { name: 'Look Up' }))
+    await user.click(screen.getByRole('button', { name: 'Consult' }))
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('Head First Design Patterns')).toBeInTheDocument()
     })
 
-    const titleInput = screen.getByLabelText('Title')
+    const titleInput = screen.getByLabelText('Title of the Work')
     await user.clear(titleInput)
     await user.type(titleInput, 'Head First Design Patterns (Revised)')
 
-    await user.click(screen.getByRole('button', { name: 'Add to Catalog' }))
+    await user.click(screen.getByRole('button', { name: 'Inscribe into the Archive' }))
 
     await waitFor(() => {
-      expect(screen.getByText('Book added to catalog')).toBeInTheDocument()
+      expect(screen.getByText('The tome has been inscribed into the Great Library')).toBeInTheDocument()
     })
     expect(capturedBody).not.toBeNull()
     expect(capturedBody!.title).toBe('Head First Design Patterns (Revised)')
@@ -119,12 +119,12 @@ describe('AddBookPage', () => {
     render(<AddBookPage onBack={noop} />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780000000000')
-    await user.click(screen.getByRole('button', { name: 'Look Up' }))
+    await user.click(screen.getByRole('button', { name: 'Consult' }))
 
     await waitFor(() => {
-      expect(screen.getByText('No book found for this ISBN')).toBeInTheDocument()
+      expect(screen.getByText('No record of this tome exists in the known realms')).toBeInTheDocument()
     })
-    expect(screen.queryByRole('button', { name: 'Add to Catalog' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Inscribe into the Archive' })).not.toBeInTheDocument()
   })
 
   it('shows error when ISBN already exists in the catalog', async () => {
@@ -139,14 +139,14 @@ describe('AddBookPage', () => {
     render(<AddBookPage onBack={noop} />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780134685991')
-    await user.click(screen.getByRole('button', { name: 'Look Up' }))
+    await user.click(screen.getByRole('button', { name: 'Consult' }))
 
     await waitFor(() => {
       expect(
-        screen.getByText('A book with this ISBN already exists in the catalog')
+        screen.getByText('This tome already resides within the Great Library')
       ).toBeInTheDocument()
     })
-    expect(screen.queryByRole('button', { name: 'Add to Catalog' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Inscribe into the Archive' })).not.toBeInTheDocument()
   })
 
   it('shows error when lookup service is unavailable', async () => {
@@ -162,14 +162,14 @@ describe('AddBookPage', () => {
     render(<AddBookPage onBack={noop} />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780134685991')
-    await user.click(screen.getByRole('button', { name: 'Look Up' }))
+    await user.click(screen.getByRole('button', { name: 'Consult' }))
 
     await waitFor(() => {
       expect(
-        screen.getByText('ISBN lookup service is currently unavailable — please try again later')
+        screen.getByText('The palantir is clouded — the lookup service cannot be reached')
       ).toBeInTheDocument()
     })
-    expect(screen.queryByRole('button', { name: 'Add to Catalog' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Inscribe into the Archive' })).not.toBeInTheDocument()
   })
 
   it('rejects invalid ISBN format without making a request', async () => {
@@ -179,8 +179,8 @@ describe('AddBookPage', () => {
 
     await user.type(screen.getByLabelText('ISBN'), '123')
 
-    expect(screen.getByText('Invalid ISBN format')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Look Up' })).toBeDisabled()
+    expect(screen.getByText('The runes are malformed — check the ISBN')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Consult' })).toBeDisabled()
   })
 
   it('handles incomplete data with missing publication year', async () => {
@@ -200,22 +200,22 @@ describe('AddBookPage', () => {
     render(<AddBookPage onBack={noop} />)
 
     await user.type(screen.getByLabelText('ISBN'), '9781234567897')
-    await user.click(screen.getByRole('button', { name: 'Look Up' }))
+    await user.click(screen.getByRole('button', { name: 'Consult' }))
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('Unknown Book')).toBeInTheDocument()
     })
     expect(screen.getByDisplayValue('Some Author')).toBeInTheDocument()
 
-    const yearInput = screen.getByLabelText('Publication Year')
+    const yearInput = screen.getByLabelText('Year of Publication')
     expect(yearInput).toHaveValue('')
-    expect(screen.getByText('Publication year is missing')).toBeInTheDocument()
+    expect(screen.getByText("The year of this work's creation is lost to time")).toBeInTheDocument()
 
     await user.type(yearInput, '2020')
-    await user.click(screen.getByRole('button', { name: 'Add to Catalog' }))
+    await user.click(screen.getByRole('button', { name: 'Inscribe into the Archive' }))
 
     await waitFor(() => {
-      expect(screen.getByText('Book added to catalog')).toBeInTheDocument()
+      expect(screen.getByText('The tome has been inscribed into the Great Library')).toBeInTheDocument()
     })
   })
 })
