@@ -3,6 +3,7 @@
 ## Catalog
 
 ### Ready
+- [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
 
@@ -16,10 +17,13 @@
 ## Lending
 
 ### Ready
+- [ ] [006 — Calculate Overdue Fees](docs/stories/lending/006-calculate-overdue-fees.feature) · `lending` · complexity: M
+- [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
 ### In Progress
 
 ### Done
+- [x] [004 — Borrow a Book (UI)](docs/stories/lending/004-borrow-book-ui.feature) · `lending` · complexity: S
 - [x] [003 — Return a Book](docs/stories/lending/003-return-book.feature) · `lending` · complexity: M
 - [x] [002 — Register a Member](docs/stories/lending/002-register-member.feature) · `lending` · complexity: S
 - [x] [001 — Borrow a Book](docs/stories/lending/001-borrow-book.feature) · `lending` · complexity: M

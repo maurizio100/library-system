@@ -2,65 +2,73 @@ import { useState } from 'react'
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
-interface RegisterMemberPageProps {
+interface LoanDetails {
+  loanId: string
+  memberId: string
+  copyBarcode: string
+  loanDate: string
+  dueDate: string
+}
+
+interface BorrowBookPageProps {
   onBack: () => void
 }
 
-function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+function BorrowBookPage({ onBack }: BorrowBookPageProps) {
+  const [memberId, setMemberId] = useState('')
+  const [copyBarcode, setCopyBarcode] = useState('')
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
-  const [registeredId, setRegisteredId] = useState('')
+  const [loanDetails, setLoanDetails] = useState<LoanDetails | null>(null)
 
-  const nameTouched = name.length > 0
-  const emailTouched = email.length > 0
-  const emailValid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)
-  const canSubmit =
+  const canConfirm =
     submitState !== 'submitting' &&
-    name.trim().length > 0 &&
-    emailValid
+    memberId.trim().length > 0 &&
+    copyBarcode.trim().length > 0
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!canSubmit) return
+    if (!canConfirm) return
 
     setSubmitState('submitting')
     setErrorMessage('')
 
     try {
-      const response = await fetch('http://localhost:8080/api/lending/members', {
+      const response = await fetch('http://localhost:8080/api/lending/loans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
+          memberId: memberId.trim(),
+          copyBarcode: copyBarcode.trim(),
         }),
       })
 
       if (!response.ok) {
         const data = await response.json()
-        throw new Error(data.error || 'Failed to register member')
+        throw new Error(data.error || 'Failed to create loan')
       }
 
       const data = await response.json()
-      setRegisteredId(data.memberId)
+      setLoanDetails({
+        loanId: data.loanId,
+        memberId: data.memberId,
+        copyBarcode: data.copyBarcode,
+        loanDate: data.loanDate,
+        dueDate: data.dueDate,
+      })
       setSubmitState('success')
-      setSuccessMessage('A new soul has been inscribed into the rolls of the Library')
     } catch (err) {
       setSubmitState('error')
-      setErrorMessage(err instanceof Error ? err.message : 'Failed to register member')
+      setErrorMessage(err instanceof Error ? err.message : 'Failed to create loan')
     }
   }
 
   const handleReset = () => {
-    setName('')
-    setEmail('')
+    setMemberId('')
+    setCopyBarcode('')
     setSubmitState('idle')
     setErrorMessage('')
-    setSuccessMessage('')
-    setRegisteredId('')
+    setLoanDetails(null)
   }
 
   return (
@@ -72,19 +80,23 @@ function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
         Return to the Archives
       </button>
       <h2 className="font-heading text-2xl text-text-heading my-4 mb-6 tracking-wide">
-        Register a New Member
+        Borrow a Book
       </h2>
 
-      {submitState === 'success' ? (
+      {submitState === 'success' && loanDetails ? (
         <div className="text-center py-8 px-4 border border-success-border rounded bg-success-bg text-success">
-          <p className="text-lg font-semibold font-heading m-0 mb-4">{successMessage}</p>
-          <p className="font-mono text-sm text-text mb-4">Member ID: {registeredId}</p>
+          <p className="text-lg font-semibold font-heading m-0 mb-4">The tome has been entrusted to the borrower</p>
+          <div className="mb-4">
+            <p>Member ID: {loanDetails.memberId}</p>
+            <p>Copy Barcode: {loanDetails.copyBarcode}</p>
+            <p>Due Date: {loanDetails.dueDate}</p>
+          </div>
           <div className="flex gap-3 justify-center">
             <button
               onClick={handleReset}
               className="py-3 px-6 text-base font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
             >
-              Register Another
+              Lend Another
             </button>
             <button
               onClick={onBack}
@@ -97,39 +109,40 @@ function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
       ) : (
         <form onSubmit={handleSubmit} className="p-6 border border-border rounded bg-bg">
           <div className="mb-4">
-            <label htmlFor="member-name-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
-              Name
+            <label htmlFor="member-id-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+              Member ID
             </label>
             <input
-              id="member-name-input"
+              id="member-id-input"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full name of the new member"
+              value={memberId}
+              onChange={(e) => setMemberId(e.target.value)}
+              placeholder="The borrower's membership identifier"
               className="w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
               disabled={submitState === 'submitting'}
             />
-            {nameTouched && name.trim().length === 0 && (
-              <p className="text-error text-sm mt-1.5">A name is required to join the fellowship</p>
-            )}
           </div>
           <div className="mb-4">
-            <label htmlFor="member-email-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
-              Email
+            <label htmlFor="copy-barcode-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+              Copy Barcode
             </label>
             <input
-              id="member-email-input"
+              id="copy-barcode-input"
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="A raven's address for correspondence"
+              value={copyBarcode}
+              onChange={(e) => setCopyBarcode(e.target.value)}
+              placeholder="The barcode inscribed upon the tome"
               className="w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
               disabled={submitState === 'submitting'}
             />
-            {emailTouched && !emailValid && (
-              <p className="text-error text-sm mt-1.5">The raven cannot find this address</p>
-            )}
           </div>
+
+          {memberId.trim().length > 0 && copyBarcode.trim().length > 0 && submitState === 'idle' && (
+            <div className="mb-4 text-text text-sm">
+              <p>Member ID: {memberId.trim()}</p>
+              <p>Copy Barcode: {copyBarcode.trim()}</p>
+            </div>
+          )}
 
           {errorMessage && (
             <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-4 text-sm">
@@ -139,10 +152,10 @@ function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
 
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!canConfirm}
             className="mt-2 py-3 px-6 text-base font-semibold font-heading bg-success text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-success-hover disabled:bg-success-disabled disabled:cursor-not-allowed"
           >
-            {submitState === 'submitting' ? 'The scribes are writing...' : 'Inscribe into the Rolls'}
+            {submitState === 'submitting' ? 'The scribes are writing...' : 'Confirm Loan'}
           </button>
         </form>
       )}
@@ -150,4 +163,4 @@ function RegisterMemberPage({ onBack }: RegisterMemberPageProps) {
   )
 }
 
-export default RegisterMemberPage
+export default BorrowBookPage

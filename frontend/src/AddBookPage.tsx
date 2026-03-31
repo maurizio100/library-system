@@ -103,95 +103,118 @@ function AddBookPage({ onBack }: AddBookPageProps) {
   }
 
   return (
-    <div className="add-book-page">
-      <button onClick={onBack} className="back-button">
+    <div>
+      <button
+        onClick={onBack}
+        className="py-1.5 px-3 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
+      >
         Return to the Archives
       </button>
-      <h2>Inscribe a Tome by ISBN</h2>
+      <h2 className="font-heading text-2xl text-text-heading my-4 mb-6 tracking-wide">
+        Inscribe a Tome by ISBN
+      </h2>
 
       {submitState === 'success' ? (
-        <div className="success-message">
-          <p>{successMessage}</p>
-          <div className="success-actions">
-            <button onClick={handleReset} className="search-button">
+        <div className="text-center py-8 px-4 border border-success-border rounded bg-success-bg text-success">
+          <p className="text-lg font-semibold font-heading m-0 mb-6">{successMessage}</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={handleReset}
+              className="py-3 px-6 text-base font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
+            >
               Inscribe Another
             </button>
-            <button onClick={onBack} className="browse-button">
+            <button
+              onClick={onBack}
+              className="py-2 px-4 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg"
+            >
               Return to the Archives
             </button>
           </div>
         </div>
       ) : (
         <>
-          <div className="lookup-form">
-            <div className="form-field">
-              <label htmlFor="isbn-input">ISBN</label>
-              <div className="isbn-input-row">
+          <div className="mb-6">
+            <div className="mb-4">
+              <label htmlFor="isbn-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+                ISBN
+              </label>
+              <div className="flex gap-2">
                 <input
                   id="isbn-input"
                   type="text"
                   value={isbn}
                   onChange={(e) => setIsbn(e.target.value)}
                   placeholder="Enter the 13-digit ISBN rune"
-                  className="search-input"
+                  className="flex-1 py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)]"
                   disabled={lookupState === 'loading'}
                 />
                 <button
                   onClick={handleLookup}
                   disabled={!isbnValid || lookupState === 'loading'}
-                  className="search-button"
+                  className="py-3 px-6 text-base font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover disabled:bg-accent-disabled disabled:cursor-not-allowed"
                 >
                   {lookupState === 'loading' ? 'Consulting the scribes...' : 'Consult'}
                 </button>
               </div>
               {isbnTouched && !isbnValid && (
-                <p className="validation-message">The runes are malformed — check the ISBN</p>
+                <p className="text-error text-sm mt-1.5">The runes are malformed — check the ISBN</p>
               )}
             </div>
           </div>
 
-          {errorMessage && <p className="error">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-4 text-sm">
+              {errorMessage}
+            </p>
+          )}
 
           {showFields && (
-            <div className="book-form">
-              <div className="form-field">
-                <label htmlFor="title-input">Title of the Work</label>
+            <div className="p-6 border border-border rounded bg-bg">
+              <div className="mb-4">
+                <label htmlFor="title-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+                  Title of the Work
+                </label>
                 <input
                   id="title-input"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="search-input"
+                  className="flex-1 w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
                 />
               </div>
-              <div className="form-field">
-                <label htmlFor="authors-input">Scribes & Authors</label>
+              <div className="mb-4">
+                <label htmlFor="authors-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+                  Scribes & Authors
+                </label>
                 <input
                   id="authors-input"
                   type="text"
                   value={authors}
                   onChange={(e) => setAuthors(e.target.value)}
                   placeholder="Comma-separated"
-                  className="search-input"
+                  className="flex-1 w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
                 />
               </div>
-              <div className="form-field">
-                <label htmlFor="year-input">Year of Publication</label>
+              <div className="mb-4">
+                <label htmlFor="year-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+                  Year of Publication
+                </label>
                 <input
                   id="year-input"
                   type="text"
                   value={publicationYear}
                   onChange={(e) => setPublicationYear(e.target.value)}
-                  className="search-input"
+                  className="flex-1 w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
                 />
                 {!publicationYear && (
-                  <p className="warning-message">The year of this work's creation is lost to time</p>
+                  <p className="text-warning text-sm mt-1.5 italic">The year of this work's creation is lost to time</p>
                 )}
               </div>
               <button
                 onClick={handleConfirm}
                 disabled={!canConfirm}
-                className="confirm-button"
+                className="mt-2 py-3 px-6 text-base font-semibold font-heading bg-success text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-success-hover disabled:bg-success-disabled disabled:cursor-not-allowed"
               >
                 {submitState === 'submitting' ? 'The scribes are writing...' : 'Inscribe into the Archive'}
               </button>

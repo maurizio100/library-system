@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import AddBookPage from './AddBookPage'
+import BorrowBookPage from './BorrowBookPage'
 import RegisterMemberPage from './RegisterMemberPage'
-import './App.css'
 
 interface BookSearchResult {
   isbn: string
@@ -19,7 +19,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'browse' | 'search'>('browse')
-  const [page, setPage] = useState<'browse' | 'add-book' | 'register-member'>('browse')
+  const [page, setPage] = useState<'browse' | 'add-book' | 'borrow-book' | 'register-member'>('browse')
 
   const fetchBooks = async (searchQuery?: string) => {
     setLoading(true)
@@ -61,105 +61,155 @@ function App() {
     fetchBooks()
   }
 
+  const header = (
+    <header className="mb-8 border-b-2 border-border pb-6">
+      <h1 className="font-heading text-5xl font-semibold tracking-wide text-text-heading m-0 mb-1 max-lg:text-3xl max-lg:my-5">
+        The Great Library of Minas Tirith
+      </h1>
+      <p className="text-text text-lg italic m-0">
+        A chronicle of all volumes known to the Realm of Gondor
+      </p>
+    </header>
+  )
+
   if (page === 'add-book') {
     return (
-      <div className="app">
-        <header>
-          <h1>The Great Library of Minas Tirith</h1>
-          <p className="subtitle">A chronicle of all volumes known to the Realm of Gondor</p>
-        </header>
+      <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
+        {header}
         <AddBookPage onBack={() => { setPage('browse'); fetchBooks() }} />
+      </div>
+    )
+  }
+
+  if (page === 'borrow-book') {
+    return (
+      <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
+        {header}
+        <BorrowBookPage onBack={() => setPage('browse')} />
       </div>
     )
   }
 
   if (page === 'register-member') {
     return (
-      <div className="app">
-        <header>
-          <h1>The Great Library of Minas Tirith</h1>
-          <p className="subtitle">A chronicle of all volumes known to the Realm of Gondor</p>
-        </header>
+      <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
+        {header}
         <RegisterMemberPage onBack={() => setPage('browse')} />
       </div>
     )
   }
 
   return (
-    <div className="app">
-      <header>
-        <h1>The Great Library of Minas Tirith</h1>
-        <p className="subtitle">A chronicle of all volumes known to the Realm of Gondor</p>
-      </header>
+    <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
+      {header}
 
-      <div className="toolbar">
-        <form onSubmit={handleSearch} className="search-form">
+      <div className="flex flex-col gap-3 mb-8">
+        <form onSubmit={handleSearch} className="flex gap-2">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search the archives by title, scribe, or ISBN..."
-            className="search-input"
+            className="flex-1 py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)]"
           />
-          <button type="submit" disabled={loading} className="search-button">
+          <button
+            type="submit"
+            disabled={loading}
+            className="py-3 px-6 text-base font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover disabled:bg-accent-disabled disabled:cursor-not-allowed"
+          >
             {loading ? 'Consulting the archives...' : 'Seek'}
           </button>
         </form>
-        <div className="toolbar-actions">
+        <div className="flex gap-2 items-center">
           {mode === 'search' && (
-            <button onClick={handleBrowseAll} className="browse-button" disabled={loading}>
+            <button
+              onClick={handleBrowseAll}
+              className="self-start py-2 px-4 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={loading}
+            >
               Reveal All Tomes
             </button>
           )}
-          <button onClick={() => setPage('add-book')} className="add-book-button">
+          <button
+            onClick={() => setPage('add-book')}
+            className="py-2 px-4 text-sm font-semibold font-heading bg-success text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-success-hover"
+          >
             Inscribe New Tome
           </button>
-          <button onClick={() => setPage('register-member')} className="register-member-button">
+          <button
+            onClick={() => setPage('borrow-book')}
+            className="py-2 px-4 text-sm font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
+          >
+            Borrow a Book
+          </button>
+          <button
+            onClick={() => setPage('register-member')}
+            className="py-2 px-4 text-sm font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
+          >
             Register Member
           </button>
         </div>
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {error && (
+        <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-4 text-sm">
+          {error}
+        </p>
+      )}
 
       {searched && results.length === 0 && !error && (
-        <div className="empty-state">
-          <p className="empty-title">
+        <div className="text-center py-12 px-4">
+          <p className="text-text-heading text-lg font-semibold font-heading m-0 mb-2">
             {mode === 'search' ? `No scrolls match "${query}" in our records` : 'The shelves stand empty, awaiting their first tome'}
           </p>
-          <p className="empty-hint">
+          <p className="text-text text-base italic m-0">
             {mode === 'search' ? 'Perhaps the scribes recorded it under a different name' : 'Inscribe new volumes to fill the Great Library'}
           </p>
         </div>
       )}
 
       {results.length > 0 && (
-        <div className="results">
-          <div className="results-header">
-            <p className="results-count">
+        <div>
+          <div className="mb-4">
+            <p className="text-text text-sm font-semibold italic m-0">
               {mode === 'search'
                 ? `${results.length} volume${results.length !== 1 ? 's' : ''} unearthed`
                 : `${results.length} volume${results.length !== 1 ? 's' : ''} in the archive`}
             </p>
           </div>
-          <div className="book-list">
+          <div className="flex flex-col gap-3">
             {results.map((book) => (
-              <div key={book.isbn} className="book-card">
-                <div className="book-info">
-                  <h2>{book.title}</h2>
-                  <p className="book-authors">{book.authors.join(', ')}</p>
-                  <p className="book-meta">
-                    <span className="isbn-badge">ISBN {book.isbn}</span>
-                    <span className="year-badge">{book.publicationYear}</span>
+              <div
+                key={book.isbn}
+                className="flex justify-between items-center py-5 px-6 border border-border rounded bg-bg transition-all hover:shadow-[0_4px_12px_rgba(44,24,16,0.08)] hover:border-accent"
+              >
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-lg font-bold font-heading text-text-heading tracking-wide m-0 mb-1">
+                    {book.title}
+                  </h2>
+                  <p className="text-text italic text-base m-0 mb-2">{book.authors.join(', ')}</p>
+                  <p className="flex gap-2 items-center m-0">
+                    <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text font-mono">
+                      ISBN {book.isbn}
+                    </span>
+                    <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text">
+                      {book.publicationYear}
+                    </span>
                   </p>
                 </div>
                 <div
-                  className={`availability ${book.availableCopies > 0 ? 'available' : 'unavailable'}`}
+                  className={`flex flex-col items-center justify-center min-w-[72px] py-2.5 px-3 rounded shrink-0 ml-4 ${
+                    book.availableCopies > 0
+                      ? 'bg-success-bg text-success'
+                      : 'bg-unavailable-bg text-error'
+                  }`}
                 >
-                  <span className="copy-count">
+                  <span className="text-xl font-bold leading-tight font-heading">
                     {book.availableCopies}/{book.totalCopies}
                   </span>
-                  <span className="copy-label">available</span>
+                  <span className="text-[0.7rem] font-semibold uppercase tracking-widest">
+                    available
+                  </span>
                 </div>
               </div>
             ))}
