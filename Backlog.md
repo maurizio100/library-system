@@ -3,12 +3,13 @@
 ## Catalog
 
 ### Ready
+- [ ] [008 — Register a Copy via the UI](docs/stories/catalog/008-register-copy-ui.feature) · `catalog` · complexity: S
 - [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
-- [ ] [007 — Sidebar Navigation for Catalog Pages](docs/stories/catalog/007-catalog-sidebar-navigation.feature) · `catalog` · complexity: M
 
 ### Done
+- [x] [007 — Sidebar Navigation for Catalog Pages](docs/stories/catalog/007-catalog-sidebar-navigation.feature) · `catalog` · complexity: M
 - [x] [005 — Add a Book by ISBN Lookup](docs/stories/catalog/005-add-book-by-isbn-lookup.feature) · `catalog` · complexity: M
 - [x] [004 — List All Books in the Catalog](docs/stories/catalog/004-list-all-books.feature) · `catalog` · complexity: S
 - [x] [001 — Add a Book to the Catalog](docs/stories/catalog/001-add-book.feature) · `catalog` · complexity: S
@@ -25,9 +26,9 @@
 - [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
 ### In Progress
-- [ ] [008 — List All Members](docs/stories/lending/008-list-all-members.feature) · `lending` · complexity: S
 
 ### Done
+- [x] [008 — List All Members](docs/stories/lending/008-list-all-members.feature) · `lending` · complexity: S
 - [x] [004 — Borrow a Book (UI)](docs/stories/lending/004-borrow-book-ui.feature) · `lending` · complexity: S
 - [x] [003 — Return a Book](docs/stories/lending/003-return-book.feature) · `lending` · complexity: M
 - [x] [002 — Register a Member](docs/stories/lending/002-register-member.feature) · `lending` · complexity: S
