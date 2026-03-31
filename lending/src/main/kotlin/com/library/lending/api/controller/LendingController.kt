@@ -4,10 +4,14 @@ import com.library.lending.api.dto.CreateLoanRequest
 import com.library.lending.api.dto.LoanResponse
 import com.library.lending.api.dto.MemberResponse
 import com.library.lending.api.dto.RegisterMemberRequest
+import com.library.lending.api.dto.ReturnBookRequest
+import com.library.lending.api.dto.ReturnResponse
 import com.library.lending.domain.command.CreateLoanCommand
 import com.library.lending.domain.command.CreateLoanHandler
 import com.library.lending.domain.command.RegisterMemberCommand
 import com.library.lending.domain.command.RegisterMemberHandler
+import com.library.lending.domain.command.ReturnBookCommand
+import com.library.lending.domain.command.ReturnBookHandler
 import com.library.lending.domain.model.MemberId
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 class LendingController(
     private val createLoanHandler: CreateLoanHandler,
     private val registerMemberHandler: RegisterMemberHandler,
+    private val returnBookHandler: ReturnBookHandler,
     private val eventPublisher: ApplicationEventPublisher
 ) {
 
@@ -58,6 +63,27 @@ class LendingController(
             loanDate = event.loanDate,
             dueDate = event.dueDate,
             status = "Active"
+        )
+    }
+
+    @PostMapping("/returns")
+    @ResponseStatus(HttpStatus.OK)
+    fun returnBook(@RequestBody request: ReturnBookRequest): ReturnResponse {
+        val command = ReturnBookCommand(
+            memberId = MemberId(request.memberId),
+            copyBarcode = request.copyBarcode
+        )
+        val result = returnBookHandler.handle(command)
+        result.events.forEach { eventPublisher.publishEvent(it) }
+
+        val bookReturnedEvent = result.events
+            .filterIsInstance<com.library.lending.domain.event.BookReturned>()
+            .first()
+
+        return ReturnResponse(
+            loanId = bookReturnedEvent.loanId,
+            returnDate = bookReturnedEvent.returnDate,
+            fee = result.fee?.amount
         )
     }
 }

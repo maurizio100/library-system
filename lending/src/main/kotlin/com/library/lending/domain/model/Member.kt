@@ -23,6 +23,12 @@ class Member(
         activeLoansCount++
     }
 
+    fun decrementActiveLoans() {
+        if (activeLoansCount > 0) {
+            activeLoansCount--
+        }
+    }
+
     companion object {
         private val EMAIL_PATTERN = Regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
 

@@ -32,6 +32,20 @@ class MemberTest {
     }
 
     @Test
+    fun `decrementActiveLoans decreases count`() {
+        val member = Member(MemberId("m-001"), "Alice", "alice@example.com", activeLoansCount = 2)
+        member.decrementActiveLoans()
+        assertEquals(1, member.activeLoansCount)
+    }
+
+    @Test
+    fun `decrementActiveLoans does not go below zero`() {
+        val member = Member(MemberId("m-001"), "Alice", "alice@example.com", activeLoansCount = 0)
+        member.decrementActiveLoans()
+        assertEquals(0, member.activeLoansCount)
+    }
+
+    @Test
     fun `register creates member with valid data`() {
         val (member, event) = Member.register("Alice Thompson", "alice@example.com")
 
