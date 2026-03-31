@@ -2,6 +2,7 @@ package com.library.lending.infra.config
 
 import com.library.lending.domain.command.CreateLoanHandler
 import com.library.lending.domain.command.RegisterMemberHandler
+import com.library.lending.domain.command.ReturnBookHandler
 import com.library.lending.domain.port.CopyAvailabilityPort
 import com.library.lending.domain.port.LoanRepository
 import com.library.lending.domain.port.MemberRepository
@@ -25,5 +26,14 @@ class LendingConfiguration {
         memberRepository: MemberRepository
     ): RegisterMemberHandler {
         return RegisterMemberHandler(memberRepository)
+    }
+
+    @Bean
+    fun returnBookHandler(
+        loanRepository: LoanRepository,
+        memberRepository: MemberRepository,
+        copyAvailabilityPort: CopyAvailabilityPort
+    ): ReturnBookHandler {
+        return ReturnBookHandler(loanRepository, memberRepository, copyAvailabilityPort)
     }
 }

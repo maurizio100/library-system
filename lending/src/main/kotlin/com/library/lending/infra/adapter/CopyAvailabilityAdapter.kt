@@ -23,4 +23,14 @@ class CopyAvailabilityAdapter(
         )
         copyJpaRepository.save(updatedCopy)
     }
+
+    override fun markCopyAsAvailable(copyBarcode: String) {
+        val copy = copyJpaRepository.findById(copyBarcode).orElse(null) ?: return
+        val updatedCopy = com.library.catalog.infra.persistence.CopyJpaEntity(
+            barcode = copy.barcode,
+            isbn = copy.isbn,
+            status = "Available"
+        )
+        copyJpaRepository.save(updatedCopy)
+    }
 }

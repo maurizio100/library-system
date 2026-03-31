@@ -5,8 +5,10 @@ import com.library.lending.domain.exception.BorrowingLimitReachedException
 import com.library.lending.domain.exception.CopyNotAvailableException
 import com.library.lending.domain.exception.DuplicateEmailException
 import com.library.lending.domain.exception.InvalidEmailException
+import com.library.lending.domain.exception.LoanAlreadyReturnedException
 import com.library.lending.domain.exception.MemberNameRequiredException
 import com.library.lending.domain.exception.MemberNotFoundException
+import com.library.lending.domain.exception.NoActiveLoanFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -49,5 +51,17 @@ class LendingExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleMemberNameRequired(ex: MemberNameRequiredException): ErrorResponse {
         return ErrorResponse(ex.message ?: "Member name is required")
+    }
+
+    @ExceptionHandler(LoanAlreadyReturnedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleLoanAlreadyReturned(ex: LoanAlreadyReturnedException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "This loan has already been returned")
+    }
+
+    @ExceptionHandler(NoActiveLoanFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleNoActiveLoanFound(ex: NoActiveLoanFoundException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "No active loan found for this copy")
     }
 }

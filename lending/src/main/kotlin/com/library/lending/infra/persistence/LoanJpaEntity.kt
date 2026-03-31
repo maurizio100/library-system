@@ -14,5 +14,6 @@ class LoanJpaEntity(
     val copyBarcode: String = "",
     val loanDate: LocalDate = LocalDate.now(),
     val dueDate: LocalDate = LocalDate.now(),
-    val status: String = "Active"
+    val status: String = "Active",
+    val returnDate: LocalDate? = null
 )
