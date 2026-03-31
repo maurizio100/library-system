@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import AddBookPage from './AddBookPage'
+import BorrowBookPage from './BorrowBookPage'
 import RegisterMemberPage from './RegisterMemberPage'
 import './App.css'
 
@@ -19,7 +20,7 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [mode, setMode] = useState<'browse' | 'search'>('browse')
-  const [page, setPage] = useState<'browse' | 'add-book' | 'register-member'>('browse')
+  const [page, setPage] = useState<'browse' | 'add-book' | 'borrow-book' | 'register-member'>('browse')
 
   const fetchBooks = async (searchQuery?: string) => {
     setLoading(true)
@@ -73,6 +74,18 @@ function App() {
     )
   }
 
+  if (page === 'borrow-book') {
+    return (
+      <div className="app">
+        <header>
+          <h1>The Great Library of Minas Tirith</h1>
+          <p className="subtitle">A chronicle of all volumes known to the Realm of Gondor</p>
+        </header>
+        <BorrowBookPage onBack={() => setPage('browse')} />
+      </div>
+    )
+  }
+
   if (page === 'register-member') {
     return (
       <div className="app">
@@ -113,6 +126,9 @@ function App() {
           )}
           <button onClick={() => setPage('add-book')} className="add-book-button">
             Inscribe New Tome
+          </button>
+          <button onClick={() => setPage('borrow-book')} className="borrow-book-button">
+            Borrow a Book
           </button>
           <button onClick={() => setPage('register-member')} className="register-member-button">
             Register Member
