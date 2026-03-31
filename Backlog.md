@@ -3,6 +3,7 @@
 ## Catalog
 
 ### Ready
+- [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
 
@@ -16,6 +17,7 @@
 ## Lending
 
 ### Ready
+- [ ] [006 — Calculate Overdue Fees](docs/stories/lending/006-calculate-overdue-fees.feature) · `lending` · complexity: M
 - [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
 ### In Progress
