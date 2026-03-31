@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
+import { MemoryRouter } from 'react-router-dom'
 import AddBookPage from '../AddBookPage'
 
 const server = setupServer()
@@ -29,7 +30,9 @@ function addBookHandler(status = 201, body: Record<string, unknown> = {}) {
   })
 }
 
-const noop = () => {}
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
 
 describe('AddBookPage', () => {
   it('successfully looks up and adds a book by ISBN', async () => {
@@ -48,7 +51,7 @@ describe('AddBookPage', () => {
       })
     )
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     const isbnInput = screen.getByLabelText('ISBN')
     await user.type(isbnInput, '9780134685991')
@@ -89,7 +92,7 @@ describe('AddBookPage', () => {
       })
     )
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780596007126')
     await user.click(screen.getByRole('button', { name: 'Consult' }))
@@ -116,7 +119,7 @@ describe('AddBookPage', () => {
 
     server.use(catalogBooksHandler([]), openLibraryHandler([]))
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780000000000')
     await user.click(screen.getByRole('button', { name: 'Consult' }))
@@ -136,7 +139,7 @@ describe('AddBookPage', () => {
       ])
     )
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780134685991')
     await user.click(screen.getByRole('button', { name: 'Consult' }))
@@ -159,7 +162,7 @@ describe('AddBookPage', () => {
       })
     )
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     await user.type(screen.getByLabelText('ISBN'), '9780134685991')
     await user.click(screen.getByRole('button', { name: 'Consult' }))
@@ -175,7 +178,7 @@ describe('AddBookPage', () => {
   it('rejects invalid ISBN format without making a request', async () => {
     const user = userEvent.setup()
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     await user.type(screen.getByLabelText('ISBN'), '123')
 
@@ -197,7 +200,7 @@ describe('AddBookPage', () => {
       })
     )
 
-    render(<AddBookPage onBack={noop} />)
+    renderWithRouter(<AddBookPage />)
 
     await user.type(screen.getByLabelText('ISBN'), '9781234567897')
     await user.click(screen.getByRole('button', { name: 'Consult' }))

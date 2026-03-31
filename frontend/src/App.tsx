@@ -1,221 +1,35 @@
-import { useState, useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Sidebar from './Sidebar'
+import BrowseBooksPage from './BrowseBooksPage'
 import AddBookPage from './AddBookPage'
 import BorrowBookPage from './BorrowBookPage'
 import RegisterMemberPage from './RegisterMemberPage'
-
-interface BookSearchResult {
-  isbn: string
-  title: string
-  authors: string[]
-  publicationYear: number
-  totalCopies: number
-  availableCopies: number
-}
+import NotFoundPage from './NotFoundPage'
 
 function App() {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState<BookSearchResult[]>([])
-  const [searched, setSearched] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [mode, setMode] = useState<'browse' | 'search'>('browse')
-  const [page, setPage] = useState<'browse' | 'add-book' | 'borrow-book' | 'register-member'>('browse')
-
-  const fetchBooks = async (searchQuery?: string) => {
-    setLoading(true)
-    setError('')
-    try {
-      const url = searchQuery
-        ? `http://localhost:8080/api/catalog/books?q=${encodeURIComponent(searchQuery)}`
-        : 'http://localhost:8080/api/catalog/books'
-      const response = await fetch(url)
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Request failed')
-      }
-      const data: BookSearchResult[] = await response.json()
-      setResults(data)
-      setSearched(true)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Request failed')
-      setResults([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchBooks()
-  }, [])
-
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!query.trim()) return
-    setMode('search')
-    fetchBooks(query.trim())
-  }
-
-  const handleBrowseAll = () => {
-    setQuery('')
-    setMode('browse')
-    fetchBooks()
-  }
-
-  const header = (
-    <header className="mb-8 border-b-2 border-border pb-6">
-      <h1 className="font-heading text-5xl font-semibold tracking-wide text-text-heading m-0 mb-1 max-lg:text-3xl max-lg:my-5">
-        The Great Library of Minas Tirith
-      </h1>
-      <p className="text-text text-lg italic m-0">
-        A chronicle of all volumes known to the Realm of Gondor
-      </p>
-    </header>
-  )
-
-  if (page === 'add-book') {
-    return (
-      <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
-        {header}
-        <AddBookPage onBack={() => { setPage('browse'); fetchBooks() }} />
-      </div>
-    )
-  }
-
-  if (page === 'borrow-book') {
-    return (
-      <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
-        {header}
-        <BorrowBookPage onBack={() => setPage('browse')} />
-      </div>
-    )
-  }
-
-  if (page === 'register-member') {
-    return (
-      <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
-        {header}
-        <RegisterMemberPage onBack={() => setPage('browse')} />
-      </div>
-    )
-  }
-
   return (
-    <div className="max-w-[860px] mx-auto py-10 px-8 font-sans">
-      {header}
-
-      <div className="flex flex-col gap-3 mb-8">
-        <form onSubmit={handleSearch} className="flex gap-2">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search the archives by title, scribe, or ISBN..."
-            className="flex-1 py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)]"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="py-3 px-6 text-base font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover disabled:bg-accent-disabled disabled:cursor-not-allowed"
-          >
-            {loading ? 'Consulting the archives...' : 'Seek'}
-          </button>
-        </form>
-        <div className="flex gap-2 items-center">
-          {mode === 'search' && (
-            <button
-              onClick={handleBrowseAll}
-              className="self-start py-2 px-4 text-sm font-semibold font-heading bg-transparent text-accent border-[1.5px] border-accent rounded cursor-pointer transition-all tracking-wide hover:bg-accent-bg disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={loading}
-            >
-              Reveal All Tomes
-            </button>
-          )}
-          <button
-            onClick={() => setPage('add-book')}
-            className="py-2 px-4 text-sm font-semibold font-heading bg-success text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-success-hover"
-          >
-            Inscribe New Tome
-          </button>
-          <button
-            onClick={() => setPage('borrow-book')}
-            className="py-2 px-4 text-sm font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
-          >
-            Borrow a Book
-          </button>
-          <button
-            onClick={() => setPage('register-member')}
-            className="py-2 px-4 text-sm font-semibold font-heading bg-accent text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-accent-hover"
-          >
-            Register Member
-          </button>
+    <div className="flex min-h-screen font-sans">
+      <Sidebar />
+      <div className="flex-1 overflow-auto">
+        <div className="max-w-[860px] mx-auto py-10 px-8">
+          <header className="mb-8 border-b-2 border-border pb-6">
+            <h1 className="font-heading text-5xl font-semibold tracking-wide text-text-heading m-0 mb-1 max-lg:text-3xl max-lg:my-5">
+              The Great Library of Minas Tirith
+            </h1>
+            <p className="text-text text-lg italic m-0">
+              A chronicle of all volumes known to the Realm of Gondor
+            </p>
+          </header>
+          <Routes>
+            <Route path="/" element={<Navigate to="/catalog/browse" replace />} />
+            <Route path="/catalog/browse" element={<BrowseBooksPage />} />
+            <Route path="/catalog/add" element={<AddBookPage />} />
+            <Route path="/lending/borrow" element={<BorrowBookPage />} />
+            <Route path="/lending/register-member" element={<RegisterMemberPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
         </div>
       </div>
-
-      {error && (
-        <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-4 text-sm">
-          {error}
-        </p>
-      )}
-
-      {searched && results.length === 0 && !error && (
-        <div className="text-center py-12 px-4">
-          <p className="text-text-heading text-lg font-semibold font-heading m-0 mb-2">
-            {mode === 'search' ? `No scrolls match "${query}" in our records` : 'The shelves stand empty, awaiting their first tome'}
-          </p>
-          <p className="text-text text-base italic m-0">
-            {mode === 'search' ? 'Perhaps the scribes recorded it under a different name' : 'Inscribe new volumes to fill the Great Library'}
-          </p>
-        </div>
-      )}
-
-      {results.length > 0 && (
-        <div>
-          <div className="mb-4">
-            <p className="text-text text-sm font-semibold italic m-0">
-              {mode === 'search'
-                ? `${results.length} volume${results.length !== 1 ? 's' : ''} unearthed`
-                : `${results.length} volume${results.length !== 1 ? 's' : ''} in the archive`}
-            </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            {results.map((book) => (
-              <div
-                key={book.isbn}
-                className="flex justify-between items-center py-5 px-6 border border-border rounded bg-bg transition-all hover:shadow-[0_4px_12px_rgba(44,24,16,0.08)] hover:border-accent"
-              >
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-lg font-bold font-heading text-text-heading tracking-wide m-0 mb-1">
-                    {book.title}
-                  </h2>
-                  <p className="text-text italic text-base m-0 mb-2">{book.authors.join(', ')}</p>
-                  <p className="flex gap-2 items-center m-0">
-                    <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text font-mono">
-                      ISBN {book.isbn}
-                    </span>
-                    <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text">
-                      {book.publicationYear}
-                    </span>
-                  </p>
-                </div>
-                <div
-                  className={`flex flex-col items-center justify-center min-w-[72px] py-2.5 px-3 rounded shrink-0 ml-4 ${
-                    book.availableCopies > 0
-                      ? 'bg-success-bg text-success'
-                      : 'bg-unavailable-bg text-error'
-                  }`}
-                >
-                  <span className="text-xl font-bold leading-tight font-heading">
-                    {book.availableCopies}/{book.totalCopies}
-                  </span>
-                  <span className="text-[0.7rem] font-semibold uppercase tracking-widest">
-                    available
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

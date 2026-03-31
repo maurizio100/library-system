@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
+import { MemoryRouter } from 'react-router-dom'
 import BorrowBookPage from '../BorrowBookPage'
 
 const server = setupServer()
@@ -20,7 +21,9 @@ function createLoanHandler(
   })
 }
 
-const noop = () => {}
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
 
 describe('BorrowBookPage', () => {
   it('successfully borrows a book through the form', async () => {
@@ -37,7 +40,7 @@ describe('BorrowBookPage', () => {
       })
     )
 
-    render(<BorrowBookPage onBack={noop} />)
+    renderWithRouter(<BorrowBookPage />)
 
     await user.type(screen.getByLabelText('Member ID'), 'm-001')
     await user.type(screen.getByLabelText('Copy Barcode'), 'EJ-001')
@@ -54,7 +57,7 @@ describe('BorrowBookPage', () => {
   it('shows loan summary before confirmation', async () => {
     const user = userEvent.setup()
 
-    render(<BorrowBookPage onBack={noop} />)
+    renderWithRouter(<BorrowBookPage />)
 
     await user.type(screen.getByLabelText('Member ID'), 'm-001')
     await user.type(screen.getByLabelText('Copy Barcode'), 'EJ-001')
@@ -70,7 +73,7 @@ describe('BorrowBookPage', () => {
       createLoanHandler(409, { error: 'Borrowing limit reached' })
     )
 
-    render(<BorrowBookPage onBack={noop} />)
+    renderWithRouter(<BorrowBookPage />)
 
     await user.type(screen.getByLabelText('Member ID'), 'm-001')
     await user.type(screen.getByLabelText('Copy Barcode'), 'EJ-001')
@@ -89,7 +92,7 @@ describe('BorrowBookPage', () => {
       createLoanHandler(409, { error: 'Copy is not available' })
     )
 
-    render(<BorrowBookPage onBack={noop} />)
+    renderWithRouter(<BorrowBookPage />)
 
     await user.type(screen.getByLabelText('Member ID'), 'm-001')
     await user.type(screen.getByLabelText('Copy Barcode'), 'EJ-001')
@@ -107,7 +110,7 @@ describe('BorrowBookPage', () => {
       createLoanHandler(404, { error: 'Member not found' })
     )
 
-    render(<BorrowBookPage onBack={noop} />)
+    renderWithRouter(<BorrowBookPage />)
 
     await user.type(screen.getByLabelText('Member ID'), 'm-999')
     await user.type(screen.getByLabelText('Copy Barcode'), 'EJ-001')
@@ -119,7 +122,7 @@ describe('BorrowBookPage', () => {
   })
 
   it('disables confirm button when fields are empty', () => {
-    render(<BorrowBookPage onBack={noop} />)
+    renderWithRouter(<BorrowBookPage />)
 
     const confirmButton = screen.getByRole('button', { name: 'Confirm Loan' })
     expect(confirmButton).toBeDisabled()
