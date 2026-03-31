@@ -16,9 +16,9 @@
 ## Lending
 
 ### Ready
-- [ ] [003 — Return a Book](docs/stories/lending/003-return-book.feature) · `lending` · complexity: M
 
 ### In Progress
+- [ ] [003 — Return a Book](docs/stories/lending/003-return-book.feature) · `lending` · complexity: M
 
 ### Done
 - [x] [002 — Register a Member](docs/stories/lending/002-register-member.feature) · `lending` · complexity: S
