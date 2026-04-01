@@ -25,9 +25,9 @@
 - [ ] [005 — Return a Book (UI)](docs/stories/lending/005-return-book-ui.feature) · `lending` · complexity: M
 
 ### In Progress
-- [ ] [009 — Select a Member (UI)](docs/stories/lending/009-select-member-ui.feature) · `lending` · complexity: S
 
 ### Done
+- [x] [009 — Select a Member (UI)](docs/stories/lending/009-select-member-ui.feature) · `lending` · complexity: S
 - [x] [008 — List All Members](docs/stories/lending/008-list-all-members.feature) · `lending` · complexity: S
 - [x] [004 — Borrow a Book (UI)](docs/stories/lending/004-borrow-book-ui.feature) · `lending` · complexity: S
 - [x] [003 — Return a Book](docs/stories/lending/003-return-book.feature) · `lending` · complexity: M
