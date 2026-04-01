@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 interface BookSearchResult {
   isbn: string
@@ -203,7 +204,9 @@ function BrowseBooksPage() {
                 <div className="flex justify-between items-center">
                   <div className="flex-1 min-w-0">
                     <h2 className="text-lg font-bold font-heading text-text-heading tracking-wide m-0 mb-1">
-                      {book.title}
+                      <Link to={`/catalog/books/${book.isbn}`} className="hover:underline">
+                        {book.title}
+                      </Link>
                     </h2>
                     <p className="text-text italic text-base m-0 mb-2">{book.authors.join(', ')}</p>
                     <p className="flex gap-2 items-center m-0">

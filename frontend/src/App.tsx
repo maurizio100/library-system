@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import BrowseBooksPage from './BrowseBooksPage'
 import AddBookPage from './AddBookPage'
+import BookDetailsPage from './BookDetailsPage'
 import BorrowBookPage from './BorrowBookPage'
 import RegisterMemberPage from './RegisterMemberPage'
 import NotFoundPage from './NotFoundPage'
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/catalog/browse" replace />} />
             <Route path="/catalog/browse" element={<BrowseBooksPage />} />
+            <Route path="/catalog/books/:isbn" element={<BookDetailsPage />} />
             <Route path="/catalog/add" element={<AddBookPage />} />
             <Route path="/lending/borrow" element={<BorrowBookPage />} />
             <Route path="/lending/register-member" element={<RegisterMemberPage />} />
