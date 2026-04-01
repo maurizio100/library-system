@@ -102,8 +102,7 @@ function BorrowBookPage() {
     setLoanDetails(null)
   }
 
-  const showMemberList =
-    !selectedMember && (memberSearch.trim().length > 0 || members.length > 0)
+  const showMemberList = !selectedMember && memberSearch.trim().length > 0
 
   return (
     <div>
