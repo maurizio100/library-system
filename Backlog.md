@@ -8,6 +8,7 @@
 ### In Progress
 
 ### Done
+- [x] [010 — Register a Copy from the Book Details Page](docs/stories/catalog/010-register-copy-from-book-details.feature) · `catalog` · complexity: S
 - [x] [009 — Book Details Page](docs/stories/catalog/009-book-details-page.feature) · `catalog` · complexity: M
 - [x] [008 — Register a Copy via the UI](docs/stories/catalog/008-register-copy-ui.feature) · `catalog` · complexity: S
 - [x] [007 — Sidebar Navigation for Catalog Pages](docs/stories/catalog/007-catalog-sidebar-navigation.feature) · `catalog` · complexity: M
