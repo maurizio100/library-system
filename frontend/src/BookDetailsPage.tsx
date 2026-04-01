@@ -20,6 +20,10 @@ function BookDetailsPage() {
   const [notFound, setNotFound] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [barcode, setBarcode] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -45,6 +49,36 @@ function BookDetailsPage() {
     }
     fetchBook()
   }, [isbn])
+
+  const handleRegisterCopy = async () => {
+    setSubmitting(true)
+    setErrorMessage('')
+    setSuccessMessage('')
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/catalog/books/${isbn}/copies`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ barcode }),
+        }
+      )
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Registration failed')
+      }
+      const data = await response.json()
+      setBook((prev) =>
+        prev ? { ...prev, copies: [...prev.copies, { barcode: data.barcode, status: 'Available' }] } : prev
+      )
+      setSuccessMessage(`Copy "${data.barcode}" registered`)
+      setBarcode('')
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : 'Registration failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -112,9 +146,9 @@ function BookDetailsPage() {
       </h3>
 
       {book.copies.length === 0 ? (
-        <p className="text-text italic text-base">No copies have been registered for this tome.</p>
+        <p className="text-text italic text-base mb-6">No copies have been registered for this tome.</p>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mb-6">
           {book.copies.map((copy) => (
             <div
               key={copy.barcode}
@@ -134,6 +168,51 @@ function BookDetailsPage() {
           ))}
         </div>
       )}
+
+      <div className="pt-4 border-t border-border">
+        <h3 className="font-heading text-lg font-semibold text-text-heading tracking-wide mb-3">
+          Register a Copy
+        </h3>
+        {successMessage && (
+          <p className="text-success py-3 px-4 bg-success-bg border border-success-border rounded mb-4 text-sm">
+            {successMessage}
+          </p>
+        )}
+        {errorMessage && (
+          <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-4 text-sm">
+            {errorMessage}
+          </p>
+        )}
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <label
+              htmlFor="barcode"
+              className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide"
+            >
+              Barcode
+            </label>
+            <input
+              id="barcode"
+              type="text"
+              value={barcode}
+              onChange={(e) => {
+                setBarcode(e.target.value)
+                setErrorMessage('')
+              }}
+              placeholder="Enter copy barcode..."
+              className="w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
+              disabled={submitting}
+            />
+          </div>
+          <button
+            onClick={handleRegisterCopy}
+            disabled={!barcode.trim() || submitting}
+            className="py-3 px-6 text-base font-semibold font-heading bg-success text-bg border-none rounded cursor-pointer transition-colors tracking-wide hover:bg-success-hover disabled:bg-success-disabled disabled:cursor-not-allowed"
+          >
+            {submitting ? 'Registering...' : 'Confirm'}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
