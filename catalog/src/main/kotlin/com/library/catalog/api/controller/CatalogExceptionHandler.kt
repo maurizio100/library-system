@@ -4,6 +4,7 @@ import com.library.catalog.api.dto.ErrorResponse
 import com.library.catalog.domain.exception.BookNotFoundException
 import com.library.catalog.domain.exception.DuplicateBarcodeException
 import com.library.catalog.domain.exception.DuplicateIsbnException
+import com.library.catalog.domain.exception.ExternalLookupUnavailableException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -29,6 +30,12 @@ class CatalogExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleBookNotFound(ex: BookNotFoundException): ErrorResponse {
         return ErrorResponse(ex.message ?: "Book not found")
+    }
+
+    @ExceptionHandler(ExternalLookupUnavailableException::class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    fun handleExternalLookupUnavailable(ex: ExternalLookupUnavailableException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "External lookup service unavailable")
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
