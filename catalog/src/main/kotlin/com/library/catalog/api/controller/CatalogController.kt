@@ -7,6 +7,7 @@ import com.library.catalog.api.dto.BookSearchResponse
 import com.library.catalog.api.dto.CopyDetailResponse
 import com.library.catalog.api.dto.CopyResponse
 import com.library.catalog.api.dto.RegisterCopyRequest
+import com.library.catalog.api.dto.TitleLookupResponse
 import com.library.catalog.domain.command.AddBookCommand
 import com.library.catalog.domain.command.AddBookHandler
 import com.library.catalog.domain.command.RegisterCopyCommand
@@ -17,6 +18,7 @@ import com.library.catalog.domain.model.Barcode
 import com.library.catalog.domain.model.ISBN
 import com.library.catalog.domain.port.BookRepository
 import com.library.catalog.domain.port.BookSearchPort
+import com.library.catalog.domain.port.ExternalBookLookupPort
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -35,8 +37,22 @@ class CatalogController(
     private val registerCopyHandler: RegisterCopyHandler,
     private val bookSearchPort: BookSearchPort,
     private val bookRepository: BookRepository,
+    private val externalBookLookupPort: ExternalBookLookupPort,
     private val eventPublisher: ApplicationEventPublisher
 ) {
+
+    @GetMapping("/books/lookup")
+    fun lookupByTitle(@RequestParam title: String): List<TitleLookupResponse> {
+        require(title.isNotBlank()) { "Title is required" }
+        return externalBookLookupPort.searchByTitle(title).map {
+            TitleLookupResponse(
+                isbn = it.isbn,
+                title = it.title,
+                authors = it.authors,
+                publicationYear = it.publicationYear
+            )
+        }
+    }
 
     @GetMapping("/books/{isbn}")
     fun getBook(@PathVariable isbn: String): BookDetailsResponse {

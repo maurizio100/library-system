@@ -9,7 +9,6 @@ import io.cucumber.java.en.When
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -25,12 +24,14 @@ class AddBookStepDefs {
     @Autowired
     private lateinit var testEventListener: TestEventListener
 
-    private lateinit var lastResult: MvcResult
+    @Autowired
+    private lateinit var scenarioState: ScenarioState
 
     @Before
     fun setUp() {
         bookJpaRepository.deleteAll()
         testEventListener.clear()
+        scenarioState.clear()
     }
 
     @Given("the catalog does not contain a book with ISBN {string}")
@@ -50,11 +51,12 @@ class AddBookStepDefs {
 
     @When("I add a book with ISBN {string}, title {string}, author {string}, and publication year {int}")
     fun iAddBookWithDetails(isbn: String, title: String, author: String, publicationYear: Int) {
-        lastResult = mockMvc.perform(
+        val result = mockMvc.perform(
             post("/api/catalog/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""{"isbn":"$isbn","title":"$title","authors":["$author"],"publicationYear":$publicationYear}""")
         ).andReturn()
+        scenarioState.lastMvcResult = result
     }
 
     @Then("the catalog contains a book with ISBN {string}")
@@ -64,13 +66,13 @@ class AddBookStepDefs {
 
     @Then("the book has title {string}")
     fun theBookHasTitle(title: String) {
-        val body = lastResult.response.contentAsString
+        val body = scenarioState.lastMvcResult!!.response.contentAsString
         assertTrue(body.contains("\"title\":\"$title\""))
     }
 
     @Then("the book has author {string}")
     fun theBookHasAuthor(author: String) {
-        val body = lastResult.response.contentAsString
+        val body = scenarioState.lastMvcResult!!.response.contentAsString
         assertTrue(body.contains("\"$author\""))
     }
 
@@ -83,9 +85,9 @@ class AddBookStepDefs {
 
     @Then("the book is rejected with reason {string}")
     fun theBookIsRejectedWithReason(reason: String) {
-        val status = lastResult.response.status
+        val status = scenarioState.lastMvcResult!!.response.status
         assertTrue(status in 400..499, "Expected 4xx status but got $status")
-        val body = lastResult.response.contentAsString
+        val body = scenarioState.lastMvcResult!!.response.contentAsString
         assertTrue(body.contains(reason), "Expected '$reason' in response body: $body")
     }
 

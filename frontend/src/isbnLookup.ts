@@ -28,6 +28,21 @@ export async function lookupIsbn(isbn: string): Promise<BookLookupResult | null>
   }
 }
 
+export interface TitleSearchCandidate {
+  isbn: string
+  title: string
+  authors: string[]
+  publicationYear: number | null
+}
+
+export async function searchByTitle(title: string): Promise<TitleSearchCandidate[]> {
+  const response = await fetch(`${API_BASE}/books/lookup?title=${encodeURIComponent(title)}`)
+  if (!response.ok) {
+    throw new Error('Book search service is currently unavailable — please try again later')
+  }
+  return response.json()
+}
+
 export async function checkIsbnExists(isbn: string): Promise<boolean> {
   const response = await fetch(`${API_BASE}/books?q=${encodeURIComponent(isbn)}`)
   if (!response.ok) {
