@@ -33,7 +33,7 @@ function BorrowBookPage() {
       .catch(() => {})
   }, [])
 
-  const filteredMembers = memberSearch.trim()
+  const filteredMembers: Member[] = memberSearch.trim()
     ? members.filter((m) =>
         m.name.toLowerCase().includes(memberSearch.trim().toLowerCase())
       )
@@ -164,7 +164,6 @@ function BorrowBookPage() {
                     <li
                       key={member.memberId}
                       role="option"
-                      aria-selected={selectedMember?.memberId === member.memberId}
                       onClick={() => handleSelectMember(member)}
                       className="py-2 px-4 text-sm font-sans text-text-heading cursor-pointer hover:bg-accent-bg"
                     >
