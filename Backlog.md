@@ -6,6 +6,7 @@
 - [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
+- [ ] [011 — Add a Book by Title Search](docs/stories/catalog/011-add-book-by-title-search.feature) · `catalog` · complexity: M
 
 ### Done
 - [x] [010 — Register a Copy from the Book Details Page](docs/stories/catalog/010-register-copy-from-book-details.feature) · `catalog` · complexity: S
