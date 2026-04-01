@@ -5,7 +5,7 @@ import {
   lookupIsbn,
   checkIsbnExists,
   searchByTitle,
-  TitleSearchCandidate,
+  type TitleSearchCandidate,
 } from './isbnLookup'
 
 type SearchMode = 'isbn' | 'title'
