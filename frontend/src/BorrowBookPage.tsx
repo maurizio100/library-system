@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
+interface Member {
+  memberId: string
+  name: string
+}
+
 interface LoanDetails {
   loanId: string
-  memberId: string
+  memberName: string
   copyBarcode: string
   loanDate: string
   dueDate: string
@@ -13,20 +18,47 @@ interface LoanDetails {
 
 function BorrowBookPage() {
   const navigate = useNavigate()
-  const [memberId, setMemberId] = useState('')
+  const [members, setMembers] = useState<Member[]>([])
+  const [memberSearch, setMemberSearch] = useState('')
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
   const [copyBarcode, setCopyBarcode] = useState('')
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [errorMessage, setErrorMessage] = useState('')
   const [loanDetails, setLoanDetails] = useState<LoanDetails | null>(null)
 
+  useEffect(() => {
+    fetch('http://localhost:8080/api/lending/members')
+      .then((res) => res.json())
+      .then((data: Member[]) => setMembers(data))
+      .catch(() => {})
+  }, [])
+
+  const filteredMembers = memberSearch.trim()
+    ? members.filter((m) =>
+        m.name.toLowerCase().includes(memberSearch.trim().toLowerCase())
+      )
+    : members
+
   const canConfirm =
     submitState !== 'submitting' &&
-    memberId.trim().length > 0 &&
+    selectedMember !== null &&
     copyBarcode.trim().length > 0
+
+  const handleSelectMember = (member: Member) => {
+    setSelectedMember(member)
+    setMemberSearch(member.name)
+  }
+
+  const handleMemberSearchChange = (value: string) => {
+    setMemberSearch(value)
+    if (selectedMember && value !== selectedMember.name) {
+      setSelectedMember(null)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!canConfirm) return
+    if (!canConfirm || !selectedMember) return
 
     setSubmitState('submitting')
     setErrorMessage('')
@@ -36,7 +68,7 @@ function BorrowBookPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          memberId: memberId.trim(),
+          memberId: selectedMember.memberId,
           copyBarcode: copyBarcode.trim(),
         }),
       })
@@ -49,7 +81,7 @@ function BorrowBookPage() {
       const data = await response.json()
       setLoanDetails({
         loanId: data.loanId,
-        memberId: data.memberId,
+        memberName: selectedMember.name,
         copyBarcode: data.copyBarcode,
         loanDate: data.loanDate,
         dueDate: data.dueDate,
@@ -62,12 +94,16 @@ function BorrowBookPage() {
   }
 
   const handleReset = () => {
-    setMemberId('')
+    setSelectedMember(null)
+    setMemberSearch('')
     setCopyBarcode('')
     setSubmitState('idle')
     setErrorMessage('')
     setLoanDetails(null)
   }
+
+  const showMemberList =
+    !selectedMember && (memberSearch.trim().length > 0 || members.length > 0)
 
   return (
     <div>
@@ -79,7 +115,7 @@ function BorrowBookPage() {
         <div className="text-center py-8 px-4 border border-success-border rounded bg-success-bg text-success">
           <p className="text-lg font-semibold font-heading m-0 mb-4">The tome has been entrusted to the borrower</p>
           <div className="mb-4">
-            <p>Member ID: {loanDetails.memberId}</p>
+            <p>Member: {loanDetails.memberName}</p>
             <p>Copy Barcode: {loanDetails.copyBarcode}</p>
             <p>Due Date: {loanDetails.dueDate}</p>
           </div>
@@ -101,19 +137,45 @@ function BorrowBookPage() {
       ) : (
         <form onSubmit={handleSubmit} className="p-6 border border-border rounded bg-bg">
           <div className="mb-4">
-            <label htmlFor="member-id-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
-              Member ID
+            <label htmlFor="member-search-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
+              Member
             </label>
             <input
-              id="member-id-input"
+              id="member-search-input"
               type="text"
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-              placeholder="The borrower's membership identifier"
+              value={memberSearch}
+              onChange={(e) => handleMemberSearchChange(e.target.value)}
+              placeholder="Search members by name"
+              aria-label="Member Search"
               className="w-full py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)] box-border"
               disabled={submitState === 'submitting'}
             />
+
+            {showMemberList && (
+              <ul
+                role="listbox"
+                aria-label="Member list"
+                className="mt-1 border border-border rounded bg-bg max-h-48 overflow-y-auto"
+              >
+                {filteredMembers.length === 0 ? (
+                  <li className="py-2 px-4 text-sm text-text italic">No members found</li>
+                ) : (
+                  filteredMembers.map((member) => (
+                    <li
+                      key={member.memberId}
+                      role="option"
+                      aria-selected={selectedMember?.memberId === member.memberId}
+                      onClick={() => handleSelectMember(member)}
+                      className="py-2 px-4 text-sm font-sans text-text-heading cursor-pointer hover:bg-accent-bg"
+                    >
+                      {member.name}
+                    </li>
+                  ))
+                )}
+              </ul>
+            )}
           </div>
+
           <div className="mb-4">
             <label htmlFor="copy-barcode-input" className="block text-sm font-semibold font-heading text-text-heading mb-1.5 tracking-wide">
               Copy Barcode
@@ -129,9 +191,9 @@ function BorrowBookPage() {
             />
           </div>
 
-          {memberId.trim().length > 0 && copyBarcode.trim().length > 0 && submitState === 'idle' && (
+          {selectedMember && copyBarcode.trim().length > 0 && submitState === 'idle' && (
             <div className="mb-4 text-text text-sm">
-              <p>Member ID: {memberId.trim()}</p>
+              <p>Member: {selectedMember.name}</p>
               <p>Copy Barcode: {copyBarcode.trim()}</p>
             </div>
           )}
