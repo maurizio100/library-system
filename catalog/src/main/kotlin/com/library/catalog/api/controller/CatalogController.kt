@@ -1,17 +1,21 @@
 package com.library.catalog.api.controller
 
 import com.library.catalog.api.dto.AddBookRequest
+import com.library.catalog.api.dto.BookDetailsResponse
 import com.library.catalog.api.dto.BookResponse
 import com.library.catalog.api.dto.BookSearchResponse
+import com.library.catalog.api.dto.CopyDetailResponse
 import com.library.catalog.api.dto.CopyResponse
 import com.library.catalog.api.dto.RegisterCopyRequest
 import com.library.catalog.domain.command.AddBookCommand
 import com.library.catalog.domain.command.AddBookHandler
 import com.library.catalog.domain.command.RegisterCopyCommand
 import com.library.catalog.domain.command.RegisterCopyHandler
+import com.library.catalog.domain.exception.BookNotFoundException
 import com.library.catalog.domain.model.Author
 import com.library.catalog.domain.model.Barcode
 import com.library.catalog.domain.model.ISBN
+import com.library.catalog.domain.port.BookRepository
 import com.library.catalog.domain.port.BookSearchPort
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
@@ -30,8 +34,22 @@ class CatalogController(
     private val addBookHandler: AddBookHandler,
     private val registerCopyHandler: RegisterCopyHandler,
     private val bookSearchPort: BookSearchPort,
+    private val bookRepository: BookRepository,
     private val eventPublisher: ApplicationEventPublisher
 ) {
+
+    @GetMapping("/books/{isbn}")
+    fun getBook(@PathVariable isbn: String): BookDetailsResponse {
+        val isbnValue = ISBN(isbn)
+        val book = bookRepository.findByIsbn(isbnValue) ?: throw BookNotFoundException(isbnValue)
+        return BookDetailsResponse(
+            isbn = book.isbn.value,
+            title = book.title,
+            authors = book.authors.map { it.name },
+            publicationYear = book.publicationYear,
+            copies = book.copies.map { CopyDetailResponse(barcode = it.barcode.value, status = it.status.name) }
+        )
+    }
 
     @GetMapping("/books")
     fun searchBooks(@RequestParam(required = false) q: String?): List<BookSearchResponse> {
