@@ -35,6 +35,7 @@ function renderWithRouter(ui: React.ReactElement) {
 }
 
 async function selectMember(user: ReturnType<typeof userEvent.setup>, name: string) {
+  await user.type(screen.getByLabelText('Member Search'), name)
   await waitFor(() => expect(screen.getByText(name)).toBeInTheDocument())
   await user.click(screen.getByText(name))
 }
@@ -85,11 +86,9 @@ describe('BorrowBookPage', () => {
 
     renderWithRouter(<BorrowBookPage />)
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument())
-
     await user.type(screen.getByLabelText('Member Search'), 'Ali')
 
-    expect(screen.getByText('Alice')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument())
     expect(screen.queryByText('Bob')).not.toBeInTheDocument()
   })
 
@@ -98,11 +97,9 @@ describe('BorrowBookPage', () => {
 
     renderWithRouter(<BorrowBookPage />)
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument())
-
     await user.type(screen.getByLabelText('Member Search'), 'Zara')
 
-    expect(screen.getByText('No members found')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText('No members found')).toBeInTheDocument())
   })
 
   it('disables confirm button until a member is selected', async () => {
