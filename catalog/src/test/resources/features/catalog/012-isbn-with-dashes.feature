@@ -21,14 +21,14 @@ Feature: Accept ISBN with dashes
   Scenario: Reject a hyphenated ISBN whose digits total fewer than 13
     Given no book exists in the catalog
     When the librarian adds a book with ISBN "978-3-16-14841-0", title "Some Book", author "Some Author", and publication year 2020
-    Then the system rejects the request with the message "ISBN must contain exactly 13 digits"
+    Then the system rejects the request with the message "ISBN must contain exactly 13 digits (got 12)"
 
   Scenario: Reject a hyphenated ISBN whose digits total more than 13
     Given no book exists in the catalog
     When the librarian adds a book with ISBN "978-3-16-1484100-0", title "Some Book", author "Some Author", and publication year 2020
-    Then the system rejects the request with the message "ISBN must contain exactly 13 digits"
+    Then the system rejects the request with the message "ISBN must contain exactly 13 digits (got 14)"
 
   Scenario: Reject an ISBN that contains characters other than digits and dashes
     Given no book exists in the catalog
     When the librarian adds a book with ISBN "978-3-16-14841O-0", title "Some Book", author "Some Author", and publication year 2020
-    Then the system rejects the request with the message "ISBN must contain exactly 13 digits"
+    Then the system rejects the request with the message "ISBN may only contain digits and hyphens"

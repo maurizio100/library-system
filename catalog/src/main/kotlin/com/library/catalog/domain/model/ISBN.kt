@@ -2,9 +2,9 @@ package com.library.catalog.domain.model
 
 class ISBN(input: String) {
     val value: String = run {
-        require(input.matches(Regex("^[\\d-]+$"))) { "ISBN must contain exactly 13 digits" }
+        require(input.matches(Regex("^[\\d-]+$"))) { "ISBN may only contain digits and hyphens" }
         val digits = input.replace("-", "")
-        require(digits.length == 13) { "ISBN must contain exactly 13 digits" }
+        require(digits.length == 13) { "ISBN must contain exactly 13 digits (got ${digits.length})" }
         digits
     }
 
