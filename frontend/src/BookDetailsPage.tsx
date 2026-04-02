@@ -1,18 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-
-interface CopyDetail {
-  barcode: string
-  status: string
-}
-
-interface BookDetails {
-  isbn: string
-  title: string
-  authors: string[]
-  publicationYear: number
-  copies: CopyDetail[]
-}
+import { getBook, registerCopy, type BookDetails } from './api/catalog'
 
 function BookDetailsPage() {
   const { isbn } = useParams<{ isbn: string }>()
@@ -28,21 +16,14 @@ function BookDetailsPage() {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/catalog/books/${isbn}`)
-        if (response.status === 404) {
+        const data = await getBook(isbn!)
+        if (data === null) {
           setNotFound(true)
-          return
+        } else {
+          setBook(data)
         }
-        if (!response.ok) {
-          const data = await response.json()
-          throw new Error(data.error || 'Request failed')
-        }
-        const data: BookDetails = await response.json()
-        setBook(data)
       } catch (err) {
-        if (!notFound) {
-          setError(err instanceof Error ? err.message : 'Request failed')
-        }
+        setError(err instanceof Error ? err.message : 'Request failed')
       } finally {
         setLoading(false)
       }
@@ -55,19 +36,7 @@ function BookDetailsPage() {
     setErrorMessage('')
     setSuccessMessage('')
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/catalog/books/${isbn}/copies`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ barcode }),
-        }
-      )
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Registration failed')
-      }
-      const data = await response.json()
+      const data = await registerCopy(isbn!, barcode)
       setBook((prev) =>
         prev ? { ...prev, copies: [...prev.copies, { barcode: data.barcode, status: 'Available' }] } : prev
       )

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { isValidIsbn, lookupIsbn } from './isbnLookup'
 import {
-  isValidIsbn,
-  lookupIsbn,
   checkIsbnExists,
-  searchByTitle,
+  searchBooksByTitle,
+  addBook,
   type TitleSearchCandidate,
-} from './isbnLookup'
+} from './api/catalog'
 
 type SearchMode = 'isbn' | 'title'
 type LookupState = 'idle' | 'loading' | 'resolved' | 'not-found' | 'error' | 'already-exists'
@@ -102,7 +102,7 @@ function AddBookPage() {
     setPublicationYear('')
 
     try {
-      const results = await searchByTitle(titleQuery)
+      const results = await searchBooksByTitle(titleQuery)
       setTitleResults(results)
       if (results.length === 0) {
         setTitleSearchState('no-results')
@@ -150,22 +150,12 @@ function AddBookPage() {
     setErrorMessage('')
 
     try {
-      const response = await fetch('http://localhost:8080/api/catalog/books', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          isbn: resolvedIsbn,
-          title: title.trim(),
-          authors: authors.split(',').map((a) => a.trim()).filter(Boolean),
-          publicationYear: publicationYear ? parseInt(publicationYear, 10) : 0,
-        }),
+      await addBook({
+        isbn: resolvedIsbn,
+        title: title.trim(),
+        authors: authors.split(',').map((a) => a.trim()).filter(Boolean),
+        publicationYear: publicationYear ? parseInt(publicationYear, 10) : 0,
       })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to add book')
-      }
-
       setSubmitState('success')
       setSuccessMessage('The tome has been inscribed into the Great Library')
     } catch (err) {

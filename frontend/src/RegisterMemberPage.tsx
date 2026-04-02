@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { registerMember } from './api/lending'
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -28,21 +29,7 @@ function RegisterMemberPage() {
     setErrorMessage('')
 
     try {
-      const response = await fetch('http://localhost:8080/api/lending/members', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim(),
-        }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to register member')
-      }
-
-      const data = await response.json()
+      const data = await registerMember(name.trim(), email.trim())
       setRegisteredId(data.memberId)
       setSubmitState('success')
       setSuccessMessage('A new soul has been inscribed into the rolls of the Library')

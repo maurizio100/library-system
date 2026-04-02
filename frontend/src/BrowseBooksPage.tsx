@@ -1,14 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-
-interface BookSearchResult {
-  isbn: string
-  title: string
-  authors: string[]
-  publicationYear: number
-  totalCopies: number
-  availableCopies: number
-}
+import { searchBooks, type BookSearchResult } from './api/catalog'
 
 function BrowseBooksPage() {
   const [query, setQuery] = useState('')
@@ -22,15 +14,7 @@ function BrowseBooksPage() {
     setLoading(true)
     setError('')
     try {
-      const url = searchQuery
-        ? `http://localhost:8080/api/catalog/books?q=${encodeURIComponent(searchQuery)}`
-        : 'http://localhost:8080/api/catalog/books'
-      const response = await fetch(url)
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Request failed')
-      }
-      const data: BookSearchResult[] = await response.json()
+      const data = await searchBooks(searchQuery)
       setResults(data)
       setSearched(true)
     } catch (err) {
