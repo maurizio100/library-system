@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
-import { isValidIsbn, lookupIsbn, checkIsbnExists, normaliseIsbn } from '../isbnLookup'
+import { isValidIsbn, lookupIsbn, normaliseIsbn } from '../isbnLookup'
+import { checkIsbnExists } from '../api/catalog'
 
 const server = setupServer()
 

@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getMembers, createLoan, type Member } from './api/lending'
 
 type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
-
-interface Member {
-  memberId: string
-  name: string
-}
 
 interface LoanDetails {
   loanId: string
@@ -27,10 +23,7 @@ function BorrowBookPage() {
   const [loanDetails, setLoanDetails] = useState<LoanDetails | null>(null)
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/lending/members')
-      .then((res) => res.json())
-      .then((data: Member[]) => setMembers(data))
-      .catch(() => {})
+    getMembers().then(setMembers).catch(() => {})
   }, [])
 
   const filteredMembers: Member[] = memberSearch.trim()
@@ -64,21 +57,7 @@ function BorrowBookPage() {
     setErrorMessage('')
 
     try {
-      const response = await fetch('http://localhost:8080/api/lending/loans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          memberId: selectedMember.memberId,
-          copyBarcode: copyBarcode.trim(),
-        }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to create loan')
-      }
-
-      const data = await response.json()
+      const data = await createLoan(selectedMember.memberId, copyBarcode.trim())
       setLoanDetails({
         loanId: data.loanId,
         memberName: selectedMember.name,
