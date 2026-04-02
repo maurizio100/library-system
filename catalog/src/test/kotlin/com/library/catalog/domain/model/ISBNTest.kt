@@ -16,7 +16,7 @@ class ISBNTest {
     @Test
     fun `ISBN with fewer than 13 digits is rejected`() {
         val ex = assertThrows<IllegalArgumentException> { ISBN("123") }
-        assertEquals("Invalid ISBN", ex.message)
+        assertEquals("ISBN must contain exactly 13 digits (got 3)", ex.message)
     }
 
     @Test
@@ -32,5 +32,33 @@ class ISBNTest {
     @Test
     fun `empty ISBN is rejected`() {
         assertThrows<IllegalArgumentException> { ISBN("") }
+    }
+
+    @Test
+    fun `valid hyphenated ISBN is accepted`() {
+        val isbn = assertDoesNotThrow { ISBN("978-3-16-148410-0") }
+        assertEquals("9783161484100", isbn.value)
+    }
+
+    @Test
+    fun `hyphenated ISBN is normalised to digits only`() {
+        assertEquals("9780134685991", ISBN("978-0-13-468599-1").value)
+    }
+
+    @Test
+    fun `hyphenated ISBN with fewer than 13 digits is rejected`() {
+        val ex = assertThrows<IllegalArgumentException> { ISBN("978-3-16-14841-0") }
+        assertEquals("ISBN must contain exactly 13 digits (got 12)", ex.message)
+    }
+
+    @Test
+    fun `hyphenated ISBN with more than 13 digits is rejected`() {
+        assertThrows<IllegalArgumentException> { ISBN("978-3-16-1484100-0") }
+    }
+
+    @Test
+    fun `ISBN with non-digit non-dash character is rejected`() {
+        val ex = assertThrows<IllegalArgumentException> { ISBN("978-3-16-14841O-0") }
+        assertEquals("ISBN may only contain digits and hyphens", ex.message)
     }
 }

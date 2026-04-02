@@ -8,7 +8,12 @@ export interface BookLookupResult {
 }
 
 export function isValidIsbn(isbn: string): boolean {
-  return /^\d{13}$/.test(isbn)
+  if (!/^[\d-]+$/.test(isbn)) return false
+  return isbn.replace(/-/g, '').length === 13
+}
+
+export function normaliseIsbn(isbn: string): string {
+  return isbn.replace(/-/g, '')
 }
 
 export async function lookupIsbn(isbn: string): Promise<BookLookupResult | null> {
@@ -44,10 +49,11 @@ export async function searchByTitle(title: string): Promise<TitleSearchCandidate
 }
 
 export async function checkIsbnExists(isbn: string): Promise<boolean> {
-  const response = await fetch(`${API_BASE}/books?q=${encodeURIComponent(isbn)}`)
+  const normalised = normaliseIsbn(isbn)
+  const response = await fetch(`${API_BASE}/books?q=${encodeURIComponent(normalised)}`)
   if (!response.ok) {
     return false
   }
   const books: { isbn: string }[] = await response.json()
-  return books.some((book) => book.isbn === isbn)
+  return books.some((book) => book.isbn === normalised)
 }

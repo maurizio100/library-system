@@ -1,5 +1,6 @@
-package com.library.catalog.bdd
+package com.library.catalog.bdd.steps
 
+import com.library.catalog.bdd.TitleSearchState
 import com.library.catalog.infra.persistence.BookJpaRepository
 import io.cucumber.java.Before
 import io.cucumber.java.en.And

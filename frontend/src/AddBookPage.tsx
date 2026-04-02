@@ -275,7 +275,7 @@ function AddBookPage() {
                 type="text"
                 value={isbn}
                 onChange={(e) => setIsbn(e.target.value)}
-                placeholder="Enter the 13-digit ISBN rune"
+                placeholder="Enter the ISBN rune (e.g. 9780134685991 or 978-0-13-468599-1)"
                 className="flex-1 py-3 px-4 text-base font-sans border-2 border-border rounded outline-none bg-bg text-text-heading transition-colors focus:border-accent focus:shadow-[0_0_0_2px_var(--color-accent-bg)]"
                 disabled={lookupState === 'loading'}
               />

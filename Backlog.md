@@ -8,6 +8,7 @@
 ### In Progress
 
 ### Done
+- [x] [012 — Accept ISBN with Dashes](docs/stories/catalog/012-isbn-with-dashes.feature) · `catalog` · complexity: S
 - [x] [011 — Add a Book by Title Search](docs/stories/catalog/011-add-book-by-title-search.feature) · `catalog` · complexity: M
 - [x] [010 — Register a Copy from the Book Details Page](docs/stories/catalog/010-register-copy-from-book-details.feature) · `catalog` · complexity: S
 - [x] [009 — Book Details Page](docs/stories/catalog/009-book-details-page.feature) · `catalog` · complexity: M

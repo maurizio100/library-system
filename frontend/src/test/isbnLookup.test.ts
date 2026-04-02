@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
 import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
-import { isValidIsbn, lookupIsbn, checkIsbnExists } from '../isbnLookup'
+import { isValidIsbn, lookupIsbn, checkIsbnExists, normaliseIsbn } from '../isbnLookup'
 
 const server = setupServer()
 
@@ -14,16 +14,34 @@ describe('isValidIsbn', () => {
     expect(isValidIsbn('9780134685991')).toBe(true)
   })
 
+  it('accepts a valid hyphenated ISBN', () => {
+    expect(isValidIsbn('978-0-13-468599-1')).toBe(true)
+  })
+
   it('rejects a string shorter than 13 digits', () => {
     expect(isValidIsbn('123')).toBe(false)
   })
 
-  it('rejects a string with non-digit characters', () => {
-    expect(isValidIsbn('978-0134685991')).toBe(false)
+  it('rejects a hyphenated ISBN with fewer than 13 digits', () => {
+    expect(isValidIsbn('978-3-16-14841-0')).toBe(false)
+  })
+
+  it('rejects an ISBN with non-digit non-dash characters', () => {
+    expect(isValidIsbn('978-013X685991')).toBe(false)
   })
 
   it('rejects an empty string', () => {
     expect(isValidIsbn('')).toBe(false)
+  })
+})
+
+describe('normaliseIsbn', () => {
+  it('strips dashes from a hyphenated ISBN', () => {
+    expect(normaliseIsbn('978-0-13-468599-1')).toBe('9780134685991')
+  })
+
+  it('leaves a plain ISBN unchanged', () => {
+    expect(normaliseIsbn('9780134685991')).toBe('9780134685991')
   })
 })
 
@@ -103,6 +121,19 @@ describe('checkIsbnExists', () => {
     )
 
     const exists = await checkIsbnExists('9780134685991')
+    expect(exists).toBe(true)
+  })
+
+  it('returns true when hyphenated ISBN matches a normalised catalog entry', async () => {
+    server.use(
+      http.get('http://localhost:8080/api/catalog/books', () => {
+        return HttpResponse.json([
+          { isbn: '9780134685991', title: 'Effective Java', authors: ['Joshua Bloch'] },
+        ])
+      })
+    )
+
+    const exists = await checkIsbnExists('978-0-13-468599-1')
     expect(exists).toBe(true)
   })
 

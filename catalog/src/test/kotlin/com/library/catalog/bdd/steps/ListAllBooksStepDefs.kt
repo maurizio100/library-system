@@ -1,4 +1,4 @@
-package com.library.catalog.bdd
+package com.library.catalog.bdd.steps
 
 import com.library.catalog.infra.persistence.BookJpaRepository
 import com.library.catalog.infra.persistence.CopyJpaRepository

@@ -8,7 +8,7 @@
 | **Barcode** | A unique identifier for a Copy. Used to identify a specific physical item during lending operations. |
 | **Available** | A Copy status meaning it is on the shelf and can be lent out. |
 | **Borrowed** | A Copy status meaning it is currently on loan to a Member. |
-| **ISBN** | International Standard Book Number. The natural identifier for a Book. |
+| **ISBN** | International Standard Book Number. The natural identifier for a Book. Must contain exactly 13 digits. May be entered with hyphens (e.g. 978-3-16-148410-0); hyphens are stripped and the result must yield exactly 13 digits. |
 
 ## Lending Context
 

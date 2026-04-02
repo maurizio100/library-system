@@ -1,5 +1,8 @@
-package com.library.catalog.bdd
+package com.library.catalog.bdd.steps
 
+import com.library.catalog.bdd.FakeExternalBookLookupPort
+import com.library.catalog.bdd.ScenarioState
+import com.library.catalog.bdd.TitleSearchState
 import com.library.catalog.domain.port.ExternalBookCandidate
 import com.library.catalog.infra.persistence.BookJpaRepository
 import io.cucumber.datatable.DataTable
