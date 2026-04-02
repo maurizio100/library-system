@@ -24,7 +24,7 @@ Feature: Add a Book to the Catalog
 
   Scenario: Reject invalid ISBN
     When I add a book with ISBN "123", title "Bad Book", author "Nobody", and publication year 2024
-    Then the book is rejected with reason "Invalid ISBN"
+    Then the book is rejected with reason "ISBN must contain exactly 13 digits"
 
   Scenario: Reject book without title
     When I add a book with ISBN "9780134685991", title "", author "Joshua Bloch", and publication year 2018
