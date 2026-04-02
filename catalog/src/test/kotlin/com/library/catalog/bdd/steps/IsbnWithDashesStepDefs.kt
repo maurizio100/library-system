@@ -1,5 +1,6 @@
-package com.library.catalog.bdd
+package com.library.catalog.bdd.steps
 
+import com.library.catalog.bdd.ScenarioState
 import com.library.catalog.infra.persistence.BookJpaRepository
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
