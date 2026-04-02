@@ -6,6 +6,7 @@
 - [ ] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 
 ### In Progress
+- [ ] [012 — Accept ISBN with Dashes](docs/stories/catalog/012-isbn-with-dashes.feature) · `catalog` · complexity: S
 
 ### Done
 - [x] [011 — Add a Book by Title Search](docs/stories/catalog/011-add-book-by-title-search.feature) · `catalog` · complexity: M
