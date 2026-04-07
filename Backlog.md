@@ -1,5 +1,14 @@
 # Backlog
 
+## Platform
+
+### Ready
+- [ ] [001 — Persistent Database Storage](docs/stories/platform/001-persistent-database.feature) · `platform` · complexity: S
+
+### In Progress
+
+### Done
+
 ## Catalog
 
 ### Ready
