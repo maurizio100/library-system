@@ -20,6 +20,7 @@ export interface BookDetails {
   title: string
   authors: string[]
   publicationYear: number
+  coverUrl?: string | null
   copies: CopyDetail[]
 }
 
@@ -28,6 +29,7 @@ export interface TitleSearchCandidate {
   title: string
   authors: string[]
   publicationYear: number | null
+  coverUrl?: string | null
 }
 
 export interface RegisterCopyResponse {
@@ -49,6 +51,7 @@ export function addBook(book: {
   title: string
   authors: string[]
   publicationYear: number
+  coverUrl?: string | null
 }): Promise<void> {
   return apiFetch('/catalog/books', { method: 'POST', body: JSON.stringify(book) })
 }

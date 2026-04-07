@@ -11,6 +11,7 @@ class Book(
     val title: String,
     val authors: List<Author>,
     val publicationYear: Int,
+    val coverUrl: String? = null,
     internal val _copies: MutableList<Copy> = mutableListOf()
 ) {
     val copies: List<Copy> get() = _copies.toList()
@@ -35,8 +36,8 @@ class Book(
     }
 
     companion object {
-        fun create(isbn: ISBN, title: String, authors: List<Author>, publicationYear: Int): Pair<Book, BookAdded> {
-            val book = Book(isbn, title, authors, publicationYear)
+        fun create(isbn: ISBN, title: String, authors: List<Author>, publicationYear: Int, coverUrl: String? = null): Pair<Book, BookAdded> {
+            val book = Book(isbn, title, authors, publicationYear, coverUrl)
             val event = BookAdded(
                 isbn = isbn.value,
                 title = title,

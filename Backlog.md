@@ -16,6 +16,7 @@
 ### In Progress
 
 ### Done
+- [x] [013 — Book Cover Image](docs/stories/catalog/013-book-cover-image.feature) · `catalog` · complexity: M
 - [x] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
 - [x] [012 — Accept ISBN with Dashes](docs/stories/catalog/012-isbn-with-dashes.feature) · `catalog` · complexity: S
 - [x] [011 — Add a Book by Title Search](docs/stories/catalog/011-add-book-by-title-search.feature) · `catalog` · complexity: M

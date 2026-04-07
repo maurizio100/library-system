@@ -5,6 +5,7 @@ data class BookDetailsResponse(
     val title: String,
     val authors: List<String>,
     val publicationYear: Int,
+    val coverUrl: String? = null,
     val copies: List<CopyDetailResponse>
 )
 

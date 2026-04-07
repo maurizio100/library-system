@@ -4,6 +4,7 @@ export interface BookLookupResult {
   title: string
   authors: string[]
   publicationYear: number | null
+  coverUrl: string | null
 }
 
 export function isValidIsbn(isbn: string): boolean {
@@ -16,7 +17,7 @@ export function normaliseIsbn(isbn: string): string {
 }
 
 export async function lookupIsbn(isbn: string): Promise<BookLookupResult | null> {
-  const response = await fetch(`${OPEN_LIBRARY_SEARCH}?isbn=${isbn}&fields=title,author_name,first_publish_year&limit=1`)
+  const response = await fetch(`${OPEN_LIBRARY_SEARCH}?isbn=${isbn}&fields=title,author_name,first_publish_year,cover_i&limit=1`)
   if (!response.ok) {
     throw new Error('ISBN lookup service is currently unavailable — please try again later')
   }
@@ -29,5 +30,6 @@ export async function lookupIsbn(isbn: string): Promise<BookLookupResult | null>
     title: doc.title ?? '',
     authors: doc.author_name ?? [],
     publicationYear: doc.first_publish_year ?? null,
+    coverUrl: doc.cover_i != null ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : null,
   }
 }
