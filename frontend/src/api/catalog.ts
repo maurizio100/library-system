@@ -1,4 +1,4 @@
-import { apiFetch, apiFetchNullable } from './client'
+import { apiFetch, apiFetchNullable, apiFetchVoid } from './client'
 import { normaliseIsbn } from '../isbnLookup'
 
 export interface BookSearchResult {
@@ -58,6 +58,10 @@ export function registerCopy(isbn: string, barcode: string): Promise<RegisterCop
     method: 'POST',
     body: JSON.stringify({ barcode }),
   })
+}
+
+export function removeCopy(barcode: string): Promise<void> {
+  return apiFetchVoid(`/catalog/copies/${encodeURIComponent(barcode)}`, { method: 'DELETE' })
 }
 
 export function searchBooksByTitle(title: string): Promise<TitleSearchCandidate[]> {

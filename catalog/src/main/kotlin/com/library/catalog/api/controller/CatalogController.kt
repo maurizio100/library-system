@@ -12,6 +12,8 @@ import com.library.catalog.domain.command.AddBookCommand
 import com.library.catalog.domain.command.AddBookHandler
 import com.library.catalog.domain.command.RegisterCopyCommand
 import com.library.catalog.domain.command.RegisterCopyHandler
+import com.library.catalog.domain.command.RemoveCopyCommand
+import com.library.catalog.domain.command.RemoveCopyHandler
 import com.library.catalog.domain.exception.BookNotFoundException
 import com.library.catalog.domain.model.Author
 import com.library.catalog.domain.model.Barcode
@@ -21,6 +23,7 @@ import com.library.catalog.domain.port.BookSearchPort
 import com.library.catalog.domain.port.ExternalBookLookupPort
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -35,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController
 class CatalogController(
     private val addBookHandler: AddBookHandler,
     private val registerCopyHandler: RegisterCopyHandler,
+    private val removeCopyHandler: RemoveCopyHandler,
     private val bookSearchPort: BookSearchPort,
     private val bookRepository: BookRepository,
     private val externalBookLookupPort: ExternalBookLookupPort,
@@ -104,6 +108,12 @@ class CatalogController(
             authors = event.authors,
             publicationYear = event.publicationYear
         )
+    }
+
+    @DeleteMapping("/copies/{barcode}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun removeCopy(@PathVariable barcode: String) {
+        removeCopyHandler.handle(RemoveCopyCommand(barcode))
     }
 
     @PostMapping("/books/{isbn}/copies")
