@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getBook, registerCopy, type BookDetails } from './api/catalog'
+import { getBook, registerCopy, removeCopy, type BookDetails } from './api/catalog'
 
 function BookDetailsPage() {
   const { isbn } = useParams<{ isbn: string }>()
@@ -12,6 +12,8 @@ function BookDetailsPage() {
   const [submitting, setSubmitting] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [removingBarcode, setRemovingBarcode] = useState<string | null>(null)
+  const [removeError, setRemoveError] = useState('')
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -30,6 +32,21 @@ function BookDetailsPage() {
     }
     fetchBook()
   }, [isbn])
+
+  const handleRemoveCopy = async (copyBarcode: string) => {
+    setRemovingBarcode(copyBarcode)
+    setRemoveError('')
+    try {
+      await removeCopy(copyBarcode)
+      setBook((prev) =>
+        prev ? { ...prev, copies: prev.copies.filter((c) => c.barcode !== copyBarcode) } : prev
+      )
+    } catch (err) {
+      setRemoveError(err instanceof Error ? err.message : 'Removal failed')
+    } finally {
+      setRemovingBarcode(null)
+    }
+  }
 
   const handleRegisterCopy = async () => {
     setSubmitting(true)
@@ -114,6 +131,12 @@ function BookDetailsPage() {
         Copies
       </h3>
 
+      {removeError && (
+        <p className="text-error py-3 px-4 bg-error-bg border border-error-border rounded mb-3 text-sm">
+          {removeError}
+        </p>
+      )}
+
       {book.copies.length === 0 ? (
         <p className="text-text italic text-base mb-6">No copies have been registered for this tome.</p>
       ) : (
@@ -124,15 +147,25 @@ function BookDetailsPage() {
               className="flex justify-between items-center py-3 px-4 border border-border rounded"
             >
               <span className="font-mono text-sm text-text-heading">{copy.barcode}</span>
-              <span
-                className={`text-xs py-0.5 px-2 rounded font-semibold uppercase tracking-widest ${
-                  copy.status === 'Available'
-                    ? 'bg-success-bg text-success'
-                    : 'bg-unavailable-bg text-error'
-                }`}
-              >
-                {copy.status}
-              </span>
+              <div className="flex items-center gap-3">
+                <span
+                  className={`text-xs py-0.5 px-2 rounded font-semibold uppercase tracking-widest ${
+                    copy.status === 'Available'
+                      ? 'bg-success-bg text-success'
+                      : 'bg-unavailable-bg text-error'
+                  }`}
+                >
+                  {copy.status}
+                </span>
+                <button
+                  onClick={() => handleRemoveCopy(copy.barcode)}
+                  disabled={copy.status === 'Borrowed' || removingBarcode !== null}
+                  title={copy.status === 'Borrowed' ? 'Cannot remove a borrowed copy' : 'Remove this copy'}
+                  className="text-xs py-1 px-3 font-semibold font-heading text-error border border-error-border rounded bg-transparent cursor-pointer transition-colors hover:bg-error-bg disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {removingBarcode === copy.barcode ? 'Removing…' : 'Remove'}
+                </button>
+              </div>
             </div>
           ))}
         </div>
