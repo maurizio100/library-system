@@ -12,9 +12,9 @@
 ## Catalog
 
 ### Ready
-- [ ] [013 — Book Cover Image](docs/stories/catalog/013-book-cover-image.feature) · `catalog` · complexity: M
 
 ### In Progress
+- [ ] [013 — Book Cover Image](docs/stories/catalog/013-book-cover-image.feature) · `catalog` · complexity: M
 
 ### Done
 - [x] [006 — Remove a Copy from the Catalog](docs/stories/catalog/006-remove-copy.feature) · `catalog` · complexity: S
