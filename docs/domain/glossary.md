@@ -9,6 +9,7 @@
 | **Available** | A Copy status meaning it is on the shelf and can be lent out. |
 | **Borrowed** | A Copy status meaning it is currently on loan to a Member. |
 | **ISBN** | International Standard Book Number. The natural identifier for a Book. Must contain exactly 13 digits. May be entered with hyphens (e.g. 978-3-16-148410-0); hyphens are stripped and the result must yield exactly 13 digits. |
+| **Cover URL** | An optional URL pointing to a cover image for a Book. Sourced from an external ISBN lookup. Absent when a Book is added manually or when the lookup returns no image. |
 
 ## Lending Context
 

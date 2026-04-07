@@ -12,6 +12,7 @@
 ## Catalog
 
 ### Ready
+- [ ] [013 — Book Cover Image](docs/stories/catalog/013-book-cover-image.feature) · `catalog` · complexity: M
 
 ### In Progress
 
