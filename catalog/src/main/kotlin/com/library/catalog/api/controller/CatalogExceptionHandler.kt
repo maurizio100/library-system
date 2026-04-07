@@ -2,6 +2,8 @@ package com.library.catalog.api.controller
 
 import com.library.catalog.api.dto.ErrorResponse
 import com.library.catalog.domain.exception.BookNotFoundException
+import com.library.catalog.domain.exception.CopyCurrentlyBorrowedException
+import com.library.catalog.domain.exception.CopyNotFoundException
 import com.library.catalog.domain.exception.DuplicateBarcodeException
 import com.library.catalog.domain.exception.DuplicateIsbnException
 import com.library.catalog.domain.exception.ExternalLookupUnavailableException
@@ -30,6 +32,18 @@ class CatalogExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     fun handleBookNotFound(ex: BookNotFoundException): ErrorResponse {
         return ErrorResponse(ex.message ?: "Book not found")
+    }
+
+    @ExceptionHandler(CopyNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun handleCopyNotFound(ex: CopyNotFoundException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "Copy not found")
+    }
+
+    @ExceptionHandler(CopyCurrentlyBorrowedException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleCopyCurrentlyBorrowed(ex: CopyCurrentlyBorrowedException): ErrorResponse {
+        return ErrorResponse(ex.message ?: "Cannot remove a copy that is currently borrowed")
     }
 
     @ExceptionHandler(ExternalLookupUnavailableException::class)

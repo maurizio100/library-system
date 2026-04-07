@@ -2,6 +2,8 @@ package com.library.catalog.domain.model
 
 import com.library.catalog.domain.event.BookAdded
 import com.library.catalog.domain.event.CopyRegistered
+import com.library.catalog.domain.exception.CopyCurrentlyBorrowedException
+import com.library.catalog.domain.exception.CopyNotFoundException
 import com.library.catalog.domain.exception.DuplicateBarcodeException
 
 class Book(
@@ -16,6 +18,12 @@ class Book(
     init {
         require(title.isNotBlank()) { "Title is required" }
         require(authors.isNotEmpty()) { "Author is required" }
+    }
+
+    fun removeCopy(barcode: Barcode) {
+        val copy = _copies.find { it.barcode == barcode } ?: throw CopyNotFoundException()
+        if (copy.status == CopyStatus.Borrowed) throw CopyCurrentlyBorrowedException()
+        _copies.remove(copy)
     }
 
     fun registerCopy(barcode: Barcode): CopyRegistered {

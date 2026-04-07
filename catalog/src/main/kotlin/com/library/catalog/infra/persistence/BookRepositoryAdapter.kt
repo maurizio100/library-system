@@ -21,9 +21,15 @@ class BookRepositoryAdapter(
         return bookEntity.toDomain(copyEntities)
     }
 
+    override fun findByBarcode(barcode: Barcode): Book? {
+        val copyEntity = copyJpaRepository.findById(barcode.value).orElse(null) ?: return null
+        return findByIsbn(ISBN(copyEntity.isbn))
+    }
+
     override fun save(book: Book) {
         bookJpaRepository.save(book.toJpaEntity())
         val existingCopyBarcodes = copyJpaRepository.findByIsbn(book.isbn.value).map { it.barcode }.toSet()
+        val domainCopyBarcodes = book.copies.map { it.barcode.value }.toSet()
         book.copies
             .filter { it.barcode.value !in existingCopyBarcodes }
             .forEach { copy ->
@@ -35,6 +41,7 @@ class BookRepositoryAdapter(
                     )
                 )
             }
+        (existingCopyBarcodes - domainCopyBarcodes).forEach { copyJpaRepository.deleteById(it) }
     }
 
     override fun existsByIsbn(isbn: ISBN): Boolean {

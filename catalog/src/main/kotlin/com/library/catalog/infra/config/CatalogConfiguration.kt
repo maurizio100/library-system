@@ -2,6 +2,7 @@ package com.library.catalog.infra.config
 
 import com.library.catalog.domain.command.AddBookHandler
 import com.library.catalog.domain.command.RegisterCopyHandler
+import com.library.catalog.domain.command.RemoveCopyHandler
 import com.library.catalog.domain.port.BookRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,5 +18,10 @@ class CatalogConfiguration {
     @Bean
     fun registerCopyHandler(bookRepository: BookRepository): RegisterCopyHandler {
         return RegisterCopyHandler(bookRepository)
+    }
+
+    @Bean
+    fun removeCopyHandler(bookRepository: BookRepository): RemoveCopyHandler {
+        return RemoveCopyHandler(bookRepository)
     }
 }
