@@ -10,7 +10,12 @@ const lendingLinks = [
   { to: '/lending/register-member', label: 'Register Member' },
 ]
 
-function Sidebar() {
+interface SidebarProps {
+  theme: 'library' | 'videogame'
+  onToggleTheme: () => void
+}
+
+function Sidebar({ theme, onToggleTheme }: SidebarProps) {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `block py-2 px-3 rounded text-sm font-semibold font-heading tracking-wide transition-colors ${
       isActive
@@ -50,6 +55,14 @@ function Sidebar() {
             </li>
           ))}
         </ul>
+      </div>
+      <div className="mt-auto pt-4 border-t border-border">
+        <button
+          onClick={onToggleTheme}
+          className="w-full py-2 px-3 text-xs font-semibold font-heading tracking-wide rounded border border-border text-text-heading hover:bg-accent-bg transition-colors text-left"
+        >
+          {theme === 'library' ? 'Switch to Game Mode' : 'Switch to Library Mode'}
+        </button>
       </div>
     </nav>
   )

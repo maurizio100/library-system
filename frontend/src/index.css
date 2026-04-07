@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -25,6 +26,48 @@
   --color-error-border: #d4a0a0;
   --color-unavailable-bg: #f0e0e0;
   --color-warning: #8b6914;
+}
+
+html[data-theme="videogame"] {
+  --font-sans: 'Press Start 2P', 'Courier New', Courier, monospace;
+  --font-heading: 'Press Start 2P', 'Courier New', Courier, monospace;
+  --font-mono: 'Press Start 2P', 'Courier New', Courier, monospace;
+
+  --color-text: #a0ffa0;
+  --color-text-heading: #00ffff;
+  --color-bg: #0a0a1a;
+  --color-border: #00ff41;
+  --color-code-bg: #0d0d2b;
+  --color-accent: #ff00ff;
+  --color-accent-bg: rgba(255, 0, 255, 0.12);
+  --color-accent-border: rgba(255, 0, 255, 0.5);
+  --color-accent-hover: #cc00cc;
+  --color-accent-disabled: #660066;
+  --color-success: #00ff41;
+  --color-success-hover: #00cc33;
+  --color-success-bg: rgba(0, 255, 65, 0.1);
+  --color-success-border: rgba(0, 255, 65, 0.4);
+  --color-success-disabled: #006618;
+  --color-error: #ff0040;
+  --color-error-bg: rgba(255, 0, 64, 0.1);
+  --color-error-border: rgba(255, 0, 64, 0.4);
+  --color-unavailable-bg: rgba(255, 0, 64, 0.1);
+  --color-warning: #ffff00;
+}
+
+html[data-theme="videogame"] body {
+  background-color: var(--color-bg);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.25) 3px,
+      rgba(0, 0, 0, 0.25) 4px
+    );
+  font-size: 11px;
+  line-height: 200%;
+  letter-spacing: 0.5px;
 }
 
 @layer base {
