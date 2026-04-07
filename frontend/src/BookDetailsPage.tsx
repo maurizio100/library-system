@@ -112,19 +112,32 @@ function BookDetailsPage() {
         </Link>
       </div>
 
-      <div className="py-5 px-6 border border-border rounded bg-bg mb-6">
-        <h2 className="text-2xl font-bold font-heading text-text-heading tracking-wide m-0 mb-1">
-          {book.title}
-        </h2>
-        <p className="text-text italic text-base m-0 mb-3">{book.authors.join(', ')}</p>
-        <p className="flex gap-2 items-center m-0">
-          <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text font-mono">
-            ISBN {book.isbn}
-          </span>
-          <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text">
-            {book.publicationYear}
-          </span>
-        </p>
+      <div className="py-5 px-6 border border-border rounded bg-bg mb-6 flex gap-5 items-start">
+        {book.coverUrl ? (
+          <img
+            src={book.coverUrl}
+            alt={`Cover of ${book.title}`}
+            className="w-24 rounded shadow-sm shrink-0 object-cover"
+          />
+        ) : (
+          <div className="w-24 h-36 rounded bg-code-bg border border-border flex items-center justify-center shrink-0">
+            <span className="text-xs text-text opacity-40 text-center leading-tight px-1">No cover</span>
+          </div>
+        )}
+        <div className="flex-1">
+          <h2 className="text-2xl font-bold font-heading text-text-heading tracking-wide m-0 mb-1">
+            {book.title}
+          </h2>
+          <p className="text-text italic text-base m-0 mb-3">{book.authors.join(', ')}</p>
+          <p className="flex gap-2 items-center m-0">
+            <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text font-mono">
+              ISBN {book.isbn}
+            </span>
+            <span className="text-xs py-0.5 px-2 rounded font-semibold bg-code-bg text-text">
+              {book.publicationYear}
+            </span>
+          </p>
+        </div>
       </div>
 
       <h3 className="font-heading text-lg font-semibold text-text-heading tracking-wide mb-3">

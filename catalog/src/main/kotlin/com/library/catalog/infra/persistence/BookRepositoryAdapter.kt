@@ -60,6 +60,7 @@ class BookRepositoryAdapter(
             title = title,
             authors = authors.map { Author(it) },
             publicationYear = publicationYear,
+            coverUrl = coverUrl,
             _copies = copies
         )
     }
@@ -69,7 +70,8 @@ class BookRepositoryAdapter(
             isbn = isbn.value,
             title = title,
             authors = authors.map { it.name }.toMutableList(),
-            publicationYear = publicationYear
+            publicationYear = publicationYear,
+            coverUrl = coverUrl
         )
     }
 }

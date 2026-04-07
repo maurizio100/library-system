@@ -7,5 +7,6 @@ data class AddBookCommand(
     val isbn: ISBN,
     val title: String,
     val authors: List<Author>,
-    val publicationYear: Int
+    val publicationYear: Int,
+    val coverUrl: String? = null
 )

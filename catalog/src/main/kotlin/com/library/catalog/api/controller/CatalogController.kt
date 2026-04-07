@@ -53,7 +53,8 @@ class CatalogController(
                 isbn = it.isbn,
                 title = it.title,
                 authors = it.authors,
-                publicationYear = it.publicationYear
+                publicationYear = it.publicationYear,
+                coverUrl = it.coverUrl
             )
         }
     }
@@ -67,6 +68,7 @@ class CatalogController(
             title = book.title,
             authors = book.authors.map { it.name },
             publicationYear = book.publicationYear,
+            coverUrl = book.coverUrl,
             copies = book.copies.map { CopyDetailResponse(barcode = it.barcode.value, status = it.status.name) }
         )
     }
@@ -98,7 +100,8 @@ class CatalogController(
             isbn = ISBN(request.isbn),
             title = request.title,
             authors = request.authors.map { Author(it) },
-            publicationYear = request.publicationYear
+            publicationYear = request.publicationYear,
+            coverUrl = request.coverUrl
         )
         val event = addBookHandler.handle(command)
         eventPublisher.publishEvent(event)

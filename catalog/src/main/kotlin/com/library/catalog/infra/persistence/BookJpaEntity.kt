@@ -14,5 +14,6 @@ class BookJpaEntity(
     val title: String = "",
     @ElementCollection(fetch = FetchType.EAGER)
     val authors: MutableList<String> = mutableListOf(),
-    val publicationYear: Int = 0
+    val publicationYear: Int = 0,
+    val coverUrl: String? = null
 )

@@ -19,7 +19,7 @@ class OpenLibraryAdapter(restClientBuilder: RestClient.Builder) : ExternalBookLo
     override fun searchByTitle(title: String): List<ExternalBookCandidate> {
         val response = try {
             restClient.get()
-                .uri("/search.json?title={title}&fields=isbn,title,author_name,first_publish_year&limit=10", title)
+                .uri("/search.json?title={title}&fields=isbn,title,author_name,first_publish_year,cover_i&limit=10", title)
                 .retrieve()
                 .body(OpenLibrarySearchResponse::class.java)
         } catch (ex: RestClientException) {
@@ -35,7 +35,8 @@ class OpenLibraryAdapter(restClientBuilder: RestClient.Builder) : ExternalBookLo
                     isbn = isbn,
                     title = doc.title ?: return@mapNotNull null,
                     authors = doc.authorName ?: emptyList(),
-                    publicationYear = doc.firstPublishYear
+                    publicationYear = doc.firstPublishYear,
+                    coverUrl = doc.coverId?.let { "https://covers.openlibrary.org/b/id/$it-L.jpg" }
                 )
             }
             ?: emptyList()
@@ -49,6 +50,7 @@ class OpenLibraryAdapter(restClientBuilder: RestClient.Builder) : ExternalBookLo
         val isbn: List<String>?,
         val title: String?,
         @JsonProperty("author_name") val authorName: List<String>?,
-        @JsonProperty("first_publish_year") val firstPublishYear: Int?
+        @JsonProperty("first_publish_year") val firstPublishYear: Int?,
+        @JsonProperty("cover_i") val coverId: Int?
     )
 }

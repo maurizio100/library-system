@@ -15,7 +15,8 @@ class AddBookHandler(private val bookRepository: BookRepository) {
             isbn = command.isbn,
             title = command.title,
             authors = command.authors,
-            publicationYear = command.publicationYear
+            publicationYear = command.publicationYear,
+            coverUrl = command.coverUrl
         )
         bookRepository.save(book)
         return event

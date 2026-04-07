@@ -34,6 +34,7 @@ function AddBookPage() {
   const [title, setTitle] = useState('')
   const [authors, setAuthors] = useState('')
   const [publicationYear, setPublicationYear] = useState('')
+  const [coverUrl, setCoverUrl] = useState<string | null>(null)
 
   // submission state
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
@@ -78,6 +79,7 @@ function AddBookPage() {
       setTitle(result.title)
       setAuthors(result.authors.join(', '))
       setPublicationYear(result.publicationYear != null ? String(result.publicationYear) : '')
+      setCoverUrl(result.coverUrl)
       setLookupState('resolved')
     } catch {
       setLookupState('error')
@@ -130,6 +132,7 @@ function AddBookPage() {
     setTitle(candidate.title)
     setAuthors(candidate.authors.join(', '))
     setPublicationYear(candidate.publicationYear != null ? String(candidate.publicationYear) : '')
+    setCoverUrl(candidate.coverUrl ?? null)
     setErrorMessage('')
   }
 
@@ -138,6 +141,7 @@ function AddBookPage() {
     setTitle('')
     setAuthors('')
     setPublicationYear('')
+    setCoverUrl(null)
     setErrorMessage('')
   }
 
@@ -155,6 +159,7 @@ function AddBookPage() {
         title: title.trim(),
         authors: authors.split(',').map((a) => a.trim()).filter(Boolean),
         publicationYear: publicationYear ? parseInt(publicationYear, 10) : 0,
+        coverUrl,
       })
       setSubmitState('success')
       setSuccessMessage('The tome has been inscribed into the Great Library')
@@ -176,6 +181,7 @@ function AddBookPage() {
     setTitle('')
     setAuthors('')
     setPublicationYear('')
+    setCoverUrl(null)
     setSubmitState('idle')
     setErrorMessage('')
     setSuccessMessage('')
@@ -191,6 +197,7 @@ function AddBookPage() {
     setTitle('')
     setAuthors('')
     setPublicationYear('')
+    setCoverUrl(null)
   }
 
   // ── Render ──
