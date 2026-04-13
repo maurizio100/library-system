@@ -6,7 +6,8 @@ A modular monolith for managing a public library's catalog and lending operation
 
 ```
 ├── CLAUDE.md              ← you are here
-├── Backlog.md             ← stories: Ready / In Progress / Done
+├── Backlog.md             ← active stories: Ready / In Progress (Done → docs/stories/done-archive.md)
+├── .claude/skills/        ← project-level agent skills (see Skills section below)
 ├── docs/
 │   ├── domain/
 │   │   ├── context-map.md
@@ -19,11 +20,11 @@ A modular monolith for managing a public library's catalog and lending operation
 │   │   ├── solution-strategy.md
 │   │   ├── quality-attributes.md
 │   │   └── context.md
-│   ├── decisions/          ← ADRs
-│   ├── skills/             ← project-level agent skills
+│   ├── decisions/          ← ADRs (see ADR Index below)
 │   └── stories/
 │       ├── catalog/        ← .feature files for Catalog epic
-│       └── lending/        ← .feature files for Lending epic
+│       ├── lending/        ← .feature files for Lending epic
+│       └── done-archive.md ← completed stories
 ├── shared/                 ← shared domain events module
 │   └── src/main/kotlin/com/library/shared/events/
 ├── catalog/                ← catalog bounded context module
@@ -44,10 +45,10 @@ A modular monolith for managing a public library's catalog and lending operation
 
 This system has two bounded contexts. **Never mix code between them.**
 
-| Context | Gradle Module | REST Base Path | Spec |
-|---|---|---|---|
-| Catalog | `:catalog` | `/api/catalog` | [docs/domain/bounded-contexts/catalog.md](docs/domain/bounded-contexts/catalog.md) |
-| Lending | `:lending` | `/api/lending` | [docs/domain/bounded-contexts/lending.md](docs/domain/bounded-contexts/lending.md) |
+| Context | Gradle Module | REST Base Path | Responsibility | Spec |
+|---|---|---|---|---|
+| Catalog | `:catalog` | `/api/catalog` | Owns the library's collection of books and physical copies. Source of truth for what exists and whether copies are available. | [catalog.md](docs/domain/bounded-contexts/catalog.md) |
+| Lending | `:lending` | `/api/lending` | Owns members, loans, returns, and overdue fees. Source of truth for who has borrowed what and what they owe. | [lending.md](docs/domain/bounded-contexts/lending.md) |
 
 Cross-context communication happens **only** through domain events in the `:shared` module.
 
@@ -92,17 +93,7 @@ Cross-context communication happens **only** through domain events in the `:shar
 
 ## How to Implement a Story
 
-1. Read the `.feature` file for the story
-2. Read the relevant bounded context spec in `docs/domain/bounded-contexts/`
-3. Read the glossary at `docs/domain/glossary.md`
-4. Create a branch: `story/<NNN>-<short-name>`
-5. **Implement domain first** — entities, value objects, business rules
-6. **Write tests** — Cucumber step definitions for every scenario, unit tests for domain logic
-7. **Then API and infra** — controllers, DTOs, persistence
-8. **Run full verification:** `./gradlew clean build`
-9. All Gherkin scenarios must pass before committing
-10. Commit: `feat(<context>): implement story <NNN> — <short title>`
-11. Open PR with story reference
+Use `/implement-story <NNN> <epic>` — the full workflow is in `.claude/skills/implement-story.md`.
 
 **If anything in the spec is ambiguous: STOP and ask. Do not guess.**
 
@@ -119,3 +110,29 @@ Cross-context communication happens **only** through domain events in the `:shar
 ./gradlew :application:bootRun # Run the application
 ./gradlew :catalog:test        # Run a specific context's tests
 ```
+
+## Skills
+
+| Skill | Usage | Purpose |
+|---|---|---|
+| `implement-story` | `/implement-story <NNN> <epic>` | Full domain-first story implementation workflow |
+| `new-story` | `/new-story <epic> "<title>"` | Scaffold a new `.feature` file and backlog entry |
+| `new-adr` | `/new-adr "<title>"` | Create a numbered ADR from the project template |
+| `update-backlog` | `/update-backlog <NNN> <epic> <status>` | Move a story between Ready / In Progress / Done |
+| `verify-architecture` | `/verify-architecture [epic]` | Run ArchUnit + grep checks for layer violations |
+| `write-domain-layer` | `/write-domain-layer <epic> "<description>"` | Entities, value objects, commands, events, ports |
+| `write-bdd-tests` | `/write-bdd-tests <epic> <NNN>` | Cucumber step definitions wired via MockMvc |
+| `write-backend-adapters` | `/write-backend-adapters <epic> "<description>"` | REST controller + DTOs + JPA entity + repo adapter |
+| `write-frontend-page` | `/write-frontend-page "<description>"` | React page + hook + api client following ADRs 005–006 |
+
+## ADR Index
+
+| # | Decision | Status |
+|---|---|---|
+| [001](docs/decisions/adr-001-project-structure.md) | Project structure and directory layout | Accepted |
+| [002](docs/decisions/adr-002-tech-stack.md) | Kotlin + Spring Boot backend, React + Vite frontend, PostgreSQL | Accepted |
+| [003](docs/decisions/adr-003-frontend-framework.md) | React with TypeScript + Vite | Accepted |
+| [004](docs/decisions/adr-004-frontend-styling-framework.md) | Tailwind CSS | Accepted |
+| [005](docs/decisions/adr-005-frontend-api-client-layer.md) | Centralized `src/api/` module with `apiFetch` base function | Accepted |
+| [006](docs/decisions/adr-006-frontend-custom-hooks.md) | Extract page logic into co-located `use<Feature>.ts` hooks | Proposed |
+| [007](docs/decisions/adr-007-persistent-database.md) | PostgreSQL for persistent storage (replaces H2 in-memory) | Accepted |
